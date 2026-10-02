@@ -1,0 +1,254 @@
+[
+  {
+    "id": "math-1-01",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 1,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "12 + 3 = ?",
+    "choices": [
+      "15",
+      "16",
+      "13",
+      "18"
+    ],
+    "answer": 0,
+    "explanation": "12에 3를 더하면 15입니다."
+  },
+  {
+    "id": "math-1-02",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 1,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "뺄셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "12 − 3 = ?",
+    "choices": [
+      "11",
+      "8",
+      "9",
+      "15"
+    ],
+    "answer": 2,
+    "explanation": "12에서 3를 빼면 9입니다."
+  },
+  {
+    "id": "math-1-03",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 1,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "15 + 4 = ?",
+    "choices": [
+      "19",
+      "20",
+      "17",
+      "22"
+    ],
+    "answer": 0,
+    "explanation": "15에 4를 더하면 19입니다."
+  },
+  {
+    "id": "math-1-04",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 1,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "뺄셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "15 − 4 = ?",
+    "choices": [
+      "13",
+      "10",
+      "11",
+      "19"
+    ],
+    "answer": 2,
+    "explanation": "15에서 4를 빼면 11입니다."
+  },
+  {
+    "id": "math-1-05",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 1,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "18 + 5 = ?",
+    "choices": [
+      "23",
+      "24",
+      "21",
+      "26"
+    ],
+    "answer": 0,
+    "explanation": "18에 5를 더하면 23입니다."
+  },
+  {
+    "id": "math-1-06",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 1,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "뺄셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "18 − 5 = ?",
+    "choices": [
+      "15",
+      "12",
+      "13",
+      "23"
+    ],
+    "answer": 2,
+    "explanation": "18에서 5를 빼면 13입니다."
+  },
+  {
+    "id": "math-1-07",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 1,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "21 + 6 = ?",
+    "choices": [
+      "27",
+      "28",
+      "25",
+      "30"
+    ],
+    "answer": 0,
+    "explanation": "21에 6를 더하면 27입니다."
+  },
+  {
+    "id": "math-1-08",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 1,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "뺄셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "21 − 6 = ?",
+    "choices": [
+      "17",
+      "14",
+      "15",
+      "27"
+    ],
+    "answer": 2,
+    "explanation": "21에서 6를 빼면 15입니다."
+  },
+  {
+    "id": "math-1-09",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 1,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "24 + 7 = ?",
+    "choices": [
+      "31",
+      "32",
+      "29",
+      "34"
+    ],
+    "answer": 0,
+    "explanation": "24에 7를 더하면 31입니다."
+  },
+  {
+    "id": "math-1-10",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 1,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "뺄셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "24 − 7 = ?",
+    "choices": [
+      "19",
+      "16",
+      "17",
+      "31"
+    ],
+    "answer": 2,
+    "explanation": "24에서 7를 빼면 17입니다."
+  },
+  {
+    "id": "math-1-11",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 1,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "27 + 8 = ?",
+    "choices": [
+      "35",
+      "36",
+      "33",
+      "38"
+    ],
+    "answer": 0,
+    "explanation": "27에 8를 더하면 35입니다."
+  },
+  {
+    "id": "math-1-12",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 1,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "뺄셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "27 − 8 = ?",
+    "choices": [
+      "21",
+      "18",
+      "19",
+      "35"
+    ],
+    "answer": 2,
+    "explanation": "27에서 8를 빼면 19입니다."
+  }
+]

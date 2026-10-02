@@ -1,0 +1,254 @@
+[
+  {
+    "id": "math-3-01",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 3,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "세 자리 수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "123 + 218 = ?",
+    "choices": [
+      "351",
+      "241",
+      "341",
+      "342"
+    ],
+    "answer": 2,
+    "explanation": "자리 값을 맞추어 더하면 341입니다."
+  },
+  {
+    "id": "math-3-02",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 3,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "21 ÷ 7 = ?",
+    "choices": [
+      "2",
+      "3",
+      "4",
+      "13"
+    ],
+    "answer": 1,
+    "explanation": "7 × 3 = 21이므로 몫은 3입니다."
+  },
+  {
+    "id": "math-3-03",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 3,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "세 자리 수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "154 + 230 = ?",
+    "choices": [
+      "394",
+      "284",
+      "384",
+      "385"
+    ],
+    "answer": 2,
+    "explanation": "자리 값을 맞추어 더하면 384입니다."
+  },
+  {
+    "id": "math-3-04",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 3,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "28 ÷ 7 = ?",
+    "choices": [
+      "3",
+      "4",
+      "5",
+      "14"
+    ],
+    "answer": 1,
+    "explanation": "7 × 4 = 28이므로 몫은 4입니다."
+  },
+  {
+    "id": "math-3-05",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 3,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "세 자리 수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "185 + 242 = ?",
+    "choices": [
+      "437",
+      "327",
+      "427",
+      "428"
+    ],
+    "answer": 2,
+    "explanation": "자리 값을 맞추어 더하면 427입니다."
+  },
+  {
+    "id": "math-3-06",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 3,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "35 ÷ 7 = ?",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "15"
+    ],
+    "answer": 1,
+    "explanation": "7 × 5 = 35이므로 몫은 5입니다."
+  },
+  {
+    "id": "math-3-07",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 3,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "세 자리 수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "216 + 254 = ?",
+    "choices": [
+      "480",
+      "370",
+      "470",
+      "471"
+    ],
+    "answer": 2,
+    "explanation": "자리 값을 맞추어 더하면 470입니다."
+  },
+  {
+    "id": "math-3-08",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 3,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "42 ÷ 7 = ?",
+    "choices": [
+      "5",
+      "6",
+      "7",
+      "16"
+    ],
+    "answer": 1,
+    "explanation": "7 × 6 = 42이므로 몫은 6입니다."
+  },
+  {
+    "id": "math-3-09",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 3,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "세 자리 수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "247 + 266 = ?",
+    "choices": [
+      "523",
+      "413",
+      "513",
+      "514"
+    ],
+    "answer": 2,
+    "explanation": "자리 값을 맞추어 더하면 513입니다."
+  },
+  {
+    "id": "math-3-10",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 3,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "49 ÷ 7 = ?",
+    "choices": [
+      "6",
+      "7",
+      "8",
+      "17"
+    ],
+    "answer": 1,
+    "explanation": "7 × 7 = 49이므로 몫은 7입니다."
+  },
+  {
+    "id": "math-3-11",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 3,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "세 자리 수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "278 + 278 = ?",
+    "choices": [
+      "566",
+      "456",
+      "556",
+      "557"
+    ],
+    "answer": 2,
+    "explanation": "자리 값을 맞추어 더하면 556입니다."
+  },
+  {
+    "id": "math-3-12",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 3,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "56 ÷ 7 = ?",
+    "choices": [
+      "7",
+      "8",
+      "9",
+      "18"
+    ],
+    "answer": 1,
+    "explanation": "7 × 8 = 56이므로 몫은 8입니다."
+  }
+]

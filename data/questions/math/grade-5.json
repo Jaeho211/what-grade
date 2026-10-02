@@ -1,0 +1,254 @@
+[
+  {
+    "id": "math-5-01",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 5,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "약수",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "12의 약수인 수는 무엇인가요?",
+    "choices": [
+      "13",
+      "6",
+      "14",
+      "15"
+    ],
+    "answer": 1,
+    "explanation": "12 ÷ 6 = 2로 나누어떨어지므로 6는 약수입니다."
+  },
+  {
+    "id": "math-5-02",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 5,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 곱셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "1.2 × 5 = ?",
+    "choices": [
+      "7.0",
+      "5.9",
+      "6.0",
+      "60"
+    ],
+    "answer": 2,
+    "explanation": "12 × 5 = 60에서 소수 자리를 반영하면 6.0입니다."
+  },
+  {
+    "id": "math-5-03",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 5,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "약수",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "14의 약수인 수는 무엇인가요?",
+    "choices": [
+      "15",
+      "7",
+      "16",
+      "17"
+    ],
+    "answer": 1,
+    "explanation": "14 ÷ 7 = 2로 나누어떨어지므로 7는 약수입니다."
+  },
+  {
+    "id": "math-5-04",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 5,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 곱셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "1.4 × 6 = ?",
+    "choices": [
+      "9.4",
+      "8.3",
+      "8.4",
+      "84"
+    ],
+    "answer": 2,
+    "explanation": "14 × 6 = 84에서 소수 자리를 반영하면 8.4입니다."
+  },
+  {
+    "id": "math-5-05",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 5,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "약수",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "16의 약수인 수는 무엇인가요?",
+    "choices": [
+      "17",
+      "8",
+      "18",
+      "19"
+    ],
+    "answer": 1,
+    "explanation": "16 ÷ 8 = 2로 나누어떨어지므로 8는 약수입니다."
+  },
+  {
+    "id": "math-5-06",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 5,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 곱셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "1.6 × 7 = ?",
+    "choices": [
+      "12.2",
+      "11.1",
+      "11.2",
+      "112"
+    ],
+    "answer": 2,
+    "explanation": "16 × 7 = 112에서 소수 자리를 반영하면 11.2입니다."
+  },
+  {
+    "id": "math-5-07",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 5,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "약수",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "18의 약수인 수는 무엇인가요?",
+    "choices": [
+      "19",
+      "9",
+      "20",
+      "21"
+    ],
+    "answer": 1,
+    "explanation": "18 ÷ 9 = 2로 나누어떨어지므로 9는 약수입니다."
+  },
+  {
+    "id": "math-5-08",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 5,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 곱셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "1.8 × 8 = ?",
+    "choices": [
+      "15.4",
+      "14.3",
+      "14.4",
+      "144"
+    ],
+    "answer": 2,
+    "explanation": "18 × 8 = 144에서 소수 자리를 반영하면 14.4입니다."
+  },
+  {
+    "id": "math-5-09",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 5,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "약수",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "20의 약수인 수는 무엇인가요?",
+    "choices": [
+      "21",
+      "10",
+      "22",
+      "23"
+    ],
+    "answer": 1,
+    "explanation": "20 ÷ 10 = 2로 나누어떨어지므로 10는 약수입니다."
+  },
+  {
+    "id": "math-5-10",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 5,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 곱셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "2.0 × 9 = ?",
+    "choices": [
+      "19.0",
+      "17.9",
+      "18.0",
+      "180"
+    ],
+    "answer": 2,
+    "explanation": "20 × 9 = 180에서 소수 자리를 반영하면 18.0입니다."
+  },
+  {
+    "id": "math-5-11",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 5,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "약수",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "22의 약수인 수는 무엇인가요?",
+    "choices": [
+      "23",
+      "11",
+      "24",
+      "25"
+    ],
+    "answer": 1,
+    "explanation": "22 ÷ 11 = 2로 나누어떨어지므로 11는 약수입니다."
+  },
+  {
+    "id": "math-5-12",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 5,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 곱셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "2.2 × 10 = ?",
+    "choices": [
+      "23.0",
+      "21.9",
+      "22.0",
+      "220"
+    ],
+    "answer": 2,
+    "explanation": "22 × 10 = 220에서 소수 자리를 반영하면 22.0입니다."
+  }
+]

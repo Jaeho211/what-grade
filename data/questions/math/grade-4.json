@@ -1,0 +1,254 @@
+[
+  {
+    "id": "math-4-01",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 4,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "분수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "2/16 + 1/16 = ?",
+    "choices": [
+      "3/32",
+      "2/16",
+      "4/16",
+      "3/16"
+    ],
+    "answer": 3,
+    "explanation": "분모가 같으므로 분자는 더하고 분모는 그대로 둡니다. 답은 3/16입니다."
+  },
+  {
+    "id": "math-4-02",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 4,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "1.2 + 0.5 = ?",
+    "choices": [
+      "1.7",
+      "2.7",
+      "1.6",
+      "1.8"
+    ],
+    "answer": 0,
+    "explanation": "소수점 위치를 맞추어 더하면 1.7입니다."
+  },
+  {
+    "id": "math-4-03",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 4,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "분수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "3/16 + 2/16 = ?",
+    "choices": [
+      "5/32",
+      "3/16",
+      "6/16",
+      "5/16"
+    ],
+    "answer": 3,
+    "explanation": "분모가 같으므로 분자는 더하고 분모는 그대로 둡니다. 답은 5/16입니다."
+  },
+  {
+    "id": "math-4-04",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 4,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "1.5 + 0.6 = ?",
+    "choices": [
+      "2.1",
+      "3.1",
+      "2.0",
+      "2.2"
+    ],
+    "answer": 0,
+    "explanation": "소수점 위치를 맞추어 더하면 2.1입니다."
+  },
+  {
+    "id": "math-4-05",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 4,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "분수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "4/16 + 3/16 = ?",
+    "choices": [
+      "7/32",
+      "12/16",
+      "8/16",
+      "7/16"
+    ],
+    "answer": 3,
+    "explanation": "분모가 같으므로 분자는 더하고 분모는 그대로 둡니다. 답은 7/16입니다."
+  },
+  {
+    "id": "math-4-06",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 4,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "1.8 + 0.7 = ?",
+    "choices": [
+      "2.5",
+      "3.5",
+      "2.4",
+      "2.6"
+    ],
+    "answer": 0,
+    "explanation": "소수점 위치를 맞추어 더하면 2.5입니다."
+  },
+  {
+    "id": "math-4-07",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 4,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "분수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "5/16 + 4/16 = ?",
+    "choices": [
+      "9/32",
+      "20/16",
+      "10/16",
+      "9/16"
+    ],
+    "answer": 3,
+    "explanation": "분모가 같으므로 분자는 더하고 분모는 그대로 둡니다. 답은 9/16입니다."
+  },
+  {
+    "id": "math-4-08",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 4,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "2.1 + 0.8 = ?",
+    "choices": [
+      "2.9",
+      "3.9",
+      "2.8",
+      "3.0"
+    ],
+    "answer": 0,
+    "explanation": "소수점 위치를 맞추어 더하면 2.9입니다."
+  },
+  {
+    "id": "math-4-09",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 4,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "분수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "6/16 + 5/16 = ?",
+    "choices": [
+      "11/32",
+      "30/16",
+      "12/16",
+      "11/16"
+    ],
+    "answer": 3,
+    "explanation": "분모가 같으므로 분자는 더하고 분모는 그대로 둡니다. 답은 11/16입니다."
+  },
+  {
+    "id": "math-4-10",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 4,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "2.4 + 0.9 = ?",
+    "choices": [
+      "3.3",
+      "4.3",
+      "3.2",
+      "3.4"
+    ],
+    "answer": 0,
+    "explanation": "소수점 위치를 맞추어 더하면 3.3입니다."
+  },
+  {
+    "id": "math-4-11",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 4,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "분수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "7/16 + 6/16 = ?",
+    "choices": [
+      "13/32",
+      "42/16",
+      "14/16",
+      "13/16"
+    ],
+    "answer": 3,
+    "explanation": "분모가 같으므로 분자는 더하고 분모는 그대로 둡니다. 답은 13/16입니다."
+  },
+  {
+    "id": "math-4-12",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "3~4",
+    "grade": 4,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "2.7 + 1.0 = ?",
+    "choices": [
+      "3.7",
+      "4.7",
+      "3.6",
+      "3.8"
+    ],
+    "answer": 0,
+    "explanation": "소수점 위치를 맞추어 더하면 3.7입니다."
+  }
+]

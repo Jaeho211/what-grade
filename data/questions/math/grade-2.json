@@ -1,0 +1,254 @@
+[
+  {
+    "id": "math-2-01",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 2,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "두 자리 수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "24 + 18 = ?",
+    "choices": [
+      "32",
+      "42",
+      "52",
+      "43"
+    ],
+    "answer": 1,
+    "explanation": "일의 자리끼리, 십의 자리끼리 더하면 42입니다."
+  },
+  {
+    "id": "math-2-02",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 2,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "곱셈구구",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "3 × 4 = ?",
+    "choices": [
+      "7",
+      "16",
+      "10",
+      "12"
+    ],
+    "answer": 3,
+    "explanation": "3를 4번 더하면 12입니다."
+  },
+  {
+    "id": "math-2-03",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 2,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "두 자리 수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "31 + 19 = ?",
+    "choices": [
+      "40",
+      "50",
+      "60",
+      "51"
+    ],
+    "answer": 1,
+    "explanation": "일의 자리끼리, 십의 자리끼리 더하면 50입니다."
+  },
+  {
+    "id": "math-2-04",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 2,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "곱셈구구",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "4 × 4 = ?",
+    "choices": [
+      "8",
+      "20",
+      "14",
+      "16"
+    ],
+    "answer": 3,
+    "explanation": "4를 4번 더하면 16입니다."
+  },
+  {
+    "id": "math-2-05",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 2,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "두 자리 수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "38 + 20 = ?",
+    "choices": [
+      "48",
+      "58",
+      "68",
+      "59"
+    ],
+    "answer": 1,
+    "explanation": "일의 자리끼리, 십의 자리끼리 더하면 58입니다."
+  },
+  {
+    "id": "math-2-06",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 2,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "곱셈구구",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "5 × 4 = ?",
+    "choices": [
+      "9",
+      "24",
+      "18",
+      "20"
+    ],
+    "answer": 3,
+    "explanation": "5를 4번 더하면 20입니다."
+  },
+  {
+    "id": "math-2-07",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 2,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "두 자리 수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "45 + 21 = ?",
+    "choices": [
+      "56",
+      "66",
+      "76",
+      "67"
+    ],
+    "answer": 1,
+    "explanation": "일의 자리끼리, 십의 자리끼리 더하면 66입니다."
+  },
+  {
+    "id": "math-2-08",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 2,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "곱셈구구",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "6 × 4 = ?",
+    "choices": [
+      "10",
+      "28",
+      "22",
+      "24"
+    ],
+    "answer": 3,
+    "explanation": "6를 4번 더하면 24입니다."
+  },
+  {
+    "id": "math-2-09",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 2,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "두 자리 수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "52 + 22 = ?",
+    "choices": [
+      "64",
+      "74",
+      "84",
+      "75"
+    ],
+    "answer": 1,
+    "explanation": "일의 자리끼리, 십의 자리끼리 더하면 74입니다."
+  },
+  {
+    "id": "math-2-10",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 2,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "곱셈구구",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "7 × 4 = ?",
+    "choices": [
+      "11",
+      "32",
+      "26",
+      "28"
+    ],
+    "answer": 3,
+    "explanation": "7를 4번 더하면 28입니다."
+  },
+  {
+    "id": "math-2-11",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 2,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "두 자리 수의 덧셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "59 + 23 = ?",
+    "choices": [
+      "72",
+      "82",
+      "92",
+      "83"
+    ],
+    "answer": 1,
+    "explanation": "일의 자리끼리, 십의 자리끼리 더하면 82입니다."
+  },
+  {
+    "id": "math-2-12",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "1~2",
+    "grade": 2,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "곱셈구구",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "8 × 4 = ?",
+    "choices": [
+      "12",
+      "36",
+      "30",
+      "32"
+    ],
+    "answer": 3,
+    "explanation": "8를 4번 더하면 32입니다."
+  }
+]

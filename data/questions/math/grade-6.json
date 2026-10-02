@@ -1,0 +1,254 @@
+[
+  {
+    "id": "math-6-01",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 6,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "1.2 ÷ 0.6 = ?",
+    "choices": [
+      "1",
+      "3",
+      "20",
+      "2"
+    ],
+    "answer": 3,
+    "explanation": "두 수를 각각 10배 하면 12 ÷ 6이므로 답은 2입니다."
+  },
+  {
+    "id": "math-6-02",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 6,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "분수의 나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "2/12 ÷ 2 = ?",
+    "choices": [
+      "2/24",
+      "4/12",
+      "5/12",
+      "2/14"
+    ],
+    "answer": 0,
+    "explanation": "2로 나누는 것은 1/2을 곱하는 것과 같으므로 2/24입니다. 약분 전 표현입니다."
+  },
+  {
+    "id": "math-6-03",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 6,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "1.8 ÷ 0.6 = ?",
+    "choices": [
+      "2",
+      "4",
+      "30",
+      "3"
+    ],
+    "answer": 3,
+    "explanation": "두 수를 각각 10배 하면 18 ÷ 6이므로 답은 3입니다."
+  },
+  {
+    "id": "math-6-04",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 6,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "분수의 나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "3/12 ÷ 2 = ?",
+    "choices": [
+      "3/24",
+      "6/12",
+      "5/12",
+      "3/14"
+    ],
+    "answer": 0,
+    "explanation": "2로 나누는 것은 1/2을 곱하는 것과 같으므로 3/24입니다. 약분 전 표현입니다."
+  },
+  {
+    "id": "math-6-05",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 6,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "2.4 ÷ 0.6 = ?",
+    "choices": [
+      "3",
+      "5",
+      "40",
+      "4"
+    ],
+    "answer": 3,
+    "explanation": "두 수를 각각 10배 하면 24 ÷ 6이므로 답은 4입니다."
+  },
+  {
+    "id": "math-6-06",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 6,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "분수의 나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "4/12 ÷ 2 = ?",
+    "choices": [
+      "4/24",
+      "8/12",
+      "6/12",
+      "4/14"
+    ],
+    "answer": 0,
+    "explanation": "2로 나누는 것은 1/2을 곱하는 것과 같으므로 4/24입니다. 약분 전 표현입니다."
+  },
+  {
+    "id": "math-6-07",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 6,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "3.0 ÷ 0.6 = ?",
+    "choices": [
+      "4",
+      "6",
+      "50",
+      "5"
+    ],
+    "answer": 3,
+    "explanation": "두 수를 각각 10배 하면 30 ÷ 6이므로 답은 5입니다."
+  },
+  {
+    "id": "math-6-08",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 6,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "분수의 나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "5/12 ÷ 2 = ?",
+    "choices": [
+      "5/24",
+      "10/12",
+      "7/12",
+      "5/14"
+    ],
+    "answer": 0,
+    "explanation": "2로 나누는 것은 1/2을 곱하는 것과 같으므로 5/24입니다. 약분 전 표현입니다."
+  },
+  {
+    "id": "math-6-09",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 6,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "3.6 ÷ 0.6 = ?",
+    "choices": [
+      "5",
+      "7",
+      "60",
+      "6"
+    ],
+    "answer": 3,
+    "explanation": "두 수를 각각 10배 하면 36 ÷ 6이므로 답은 6입니다."
+  },
+  {
+    "id": "math-6-10",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 6,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "분수의 나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "6/12 ÷ 2 = ?",
+    "choices": [
+      "6/24",
+      "12/12",
+      "8/12",
+      "6/14"
+    ],
+    "answer": 0,
+    "explanation": "2로 나누는 것은 1/2을 곱하는 것과 같으므로 6/24입니다. 약분 전 표현입니다."
+  },
+  {
+    "id": "math-6-11",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 6,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "소수의 나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "4.2 ÷ 0.6 = ?",
+    "choices": [
+      "6",
+      "8",
+      "70",
+      "7"
+    ],
+    "answer": 3,
+    "explanation": "두 수를 각각 10배 하면 42 ÷ 6이므로 답은 7입니다."
+  },
+  {
+    "id": "math-6-12",
+    "subject": "math",
+    "curriculum": "2022",
+    "gradeBand": "5~6",
+    "grade": 6,
+    "domain": "수와 연산",
+    "difficulty": "기초",
+    "concept": "분수의 나눗셈",
+    "prerequisites": [],
+    "ability": "계산",
+    "prompt": "7/12 ÷ 2 = ?",
+    "choices": [
+      "7/24",
+      "14/12",
+      "9/12",
+      "7/14"
+    ],
+    "answer": 0,
+    "explanation": "2로 나누는 것은 1/2을 곱하는 것과 같으므로 7/24입니다. 약분 전 표현입니다."
+  }
+]
