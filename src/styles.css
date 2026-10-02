@@ -99,3 +99,18 @@ summary { min-height: 56px; font-size: 15px; }
   .choice:hover { background: #fffefb; border-color: #dfe3d7; }
   .choice.selected:hover { background: #edf3e6; border-color: #3b7953; }
 }
+
+/* Timed challenge */
+.timer { margin: -20px 0 28px; }
+.timer-heading { display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: #657062; }
+.timer-heading strong { color: #285943; font-size: 25px; font-variant-numeric: tabular-nums; }
+.timer-track { height: 8px; background: #e5e9de; border-radius: 8px; overflow: hidden; margin-top: 8px; }
+.timer-track div { height: 100%; background: #41825b; transition: width .1s linear; }
+.timer.urgent strong { color: #b3432e; }
+.timer.urgent .timer-track div { background: #b3432e; }
+.timeout-message { background: #f4e5d6; color: #92432b; padding: 12px; border-radius: 10px; text-align: center; font-weight: 700; }
+.choice:disabled { opacity: .55; cursor: default; }
+.review-heading { font-weight: 700; font-size: 17px; justify-content: space-between; }
+.review-heading span { font-size: 12px; color: #75836c; }
+.result-actions { margin-top: 30px; }
+@media (max-width: 760px) { .quiz.panel { padding-bottom: 30px; } .timer { margin-top: -10px; } }

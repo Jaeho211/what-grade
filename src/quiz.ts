@@ -10,7 +10,7 @@ export type Question = {
   id: string; grade: number; concept: string; prompt: string;
   choices: string[]; answer: number; explanation: string;
 };
-export type Response = { question: Question; selected: number | null };
+export type Response = { question: Question; selected: number | null; elapsedMs?: number; timedOut?: boolean };
 export const questions: Question[] = [...grade1, ...grade2, ...grade3, ...grade4, ...grade5, ...grade6];
 export const TOTAL = 10;
 export const correct = (response: Response) => response.selected === response.question.answer;
@@ -61,5 +61,5 @@ export function result(responses: Response[]) {
   const high = Math.min(6, grade + 1);
   const strengths = [...new Set(responses.filter(correct).map(r => r.question.concept))];
   const practice = [...new Set(responses.filter(r => !correct(r)).map(r => r.question.concept))];
-  return { low, high, strengths, practice, score: responses.filter(correct).length };
+  return { grade, low, high, strengths, practice, elapsedMs: responses.reduce((sum, r) => sum + (r.elapsedMs ?? 0), 0), timeouts: responses.filter(r => r.timedOut).length, score: responses.filter(correct).length };
 }
