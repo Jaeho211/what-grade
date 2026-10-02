@@ -1,3 +1,4 @@
+import { generateQuestion } from './question-generator';
 import grade1 from '../data/questions/math/grade-1.json';
 import grade2 from '../data/questions/math/grade-2.json';
 import grade3 from '../data/questions/math/grade-3.json';
@@ -36,8 +37,16 @@ export function nextQuestion(responses: Response[], random = Math.random): Quest
     ? nearby.filter(q => q.concept !== responses.at(-1)?.question.concept)
     : nearby;
   const pool = differentConcept.length ? differentConcept : nearby;
-  const question = pool[Math.min(pool.length - 1, Math.floor(random() * pool.length))];
-  if (!question) return undefined;
+  const template = pool[Math.min(pool.length - 1, Math.floor(random() * pool.length))];
+  if (!template) return undefined;
+  const usedPrompts = new Set(responses.map(r => r.question.prompt));
+  let question = generateQuestion(template, random);
+  // Bounded retries also work with a constant injected RNG in tests.
+  for (let attempt = 1; usedPrompts.has(question.prompt) && attempt <= 100; attempt++) {
+    let draw = 0;
+    question = generateQuestion(template, () => (random() + attempt * 0.618033988749895 + draw++ * 0.414213562373095) % 1);
+  }
+  if (usedPrompts.has(question.prompt)) throw new Error('새 문제를 생성하지 못했습니다.');
   const order = question.choices.map((_, i) => i);
   for (let i = order.length - 1; i > 0; i--) {
     const j = Math.min(i, Math.floor(random() * (i + 1)));
