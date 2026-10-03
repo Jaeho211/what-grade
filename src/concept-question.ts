@@ -119,7 +119,11 @@ export function generateConceptQuestion(template: Question, random = Math.random
     }
     case '집합의 원소 수': {
       const n=int(4,6), answer=2**(n-2);
-      return number(`A = {a, b, ${Array.from({length:n-2},(_,i)=>i+1).join(", ")}}입니다. a는 포함하고 b는 제외하는 부분집합은 몇 개인가요?`,answer,`a와 b의 포함 여부는 정해져 있습니다. 나머지 ${n-2}개 원소는 각각 포함 여부를 선택하므로 2^${n-2} = ${answer}개입니다.`);
+      const optional = Array.from({ length: n-2 }, (_, i) => i+1);
+      const sets = Array.from({ length: answer }, (_, mask) =>
+        `{a${optional.filter((_, i) => mask & (1 << i)).map(x => `, ${x}`).join('')}}`);
+      return number(`A = {a, b, ${optional.join(", ")}}입니다. a는 포함하고 b는 제외하는 부분집합은 몇 개인가요?`,answer,
+        `a는 반드시 넣고 b는 넣지 않습니다. ${optional.join(', ')}은 각각 넣거나 뺄 수 있습니다. 가능한 집합은 ${sets.join(' / ')}로, 모두 ${answer}개입니다. 숫자를 하나도 넣지 않은 {a}도 조건을 만족합니다. 남은 원소마다 두 선택이 있으므로 2^${n-2} = ${answer}개입니다.`);
     }
     case '합성함수': {
       const a=int(2,3), b=int(1,3), x=int(1,2), answer=(a*x+b)**2;
