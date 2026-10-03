@@ -61,3 +61,22 @@ describe('textbook math notation', () => {
   });
 
 });
+
+
+describe('trigonometric notation', () => {
+  it.each(['sin A', 'sinA', 'cos A', 'tan A'])('keeps %s upright with an italic angle', text => {
+    const html = renderToStaticMarkup(<MathText text={text} />);
+    const fn = text.slice(0,3);
+    expect(html).toContain(`<mi mathvariant="normal">${fn}</mi>`);
+    expect(html).toContain('<mspace width="0.16em"></mspace><mi>A</mi>');
+    expect(html).not.toContain('<mi>n</mi>');
+    expect(html.match(/<math /g)).toHaveLength(1);
+  });
+  it('preserves Korean prose and fractions in a complete trig equation', () => {
+    const html = renderToStaticMarkup(<MathText text="각 A에서 sin A = 3/5입니다. 맞은편 변 = 빗변 × sin A" />);
+    expect(html).toContain('각 ');
+    expect(html).toContain('입니다. 맞은편 변 ');
+    expect(html).toContain('<mo>=</mo><mfrac><mn>3</mn><mn>5</mn></mfrac>');
+    expect(html.match(/mathvariant="normal">sin/g)).toHaveLength(2);
+  });
+});

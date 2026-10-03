@@ -1,18 +1,24 @@
 import { createElement, Fragment, type ReactNode } from 'react';
 
 function expression(text: string): ReactNode[] {
-  const tokens = text.match(/\d+\/\d+|\d+(?:\.\d+)?|[xyn]|√|\^|[²³]|[^\s]/g) ?? [];
+  const tokens = text.match(/sin|cos|tan|\d+\/\d+|\d+(?:\.\d+)?|[xynA-Zθ]|√|\^|[²³]|[^\s]/g) ?? [];
   const nodes: ReactNode[] = [];
-  const atom = (token: string) => createElement(/^[xyn]$/.test(token) ? 'mi' : 'mn', null, token);
+  const atom = (token: string) => createElement(/^[xynA-Zθ]$/.test(token) ? 'mi' : 'mn', null, token);
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
     let node: ReactNode;
+    if (/^(sin|cos|tan)$/.test(token)) {
+      nodes.push(createElement('mi', { key: `${i}-function`, mathvariant: 'normal' }, token));
+      nodes.push(createElement('mo', { key: `${i}-apply` }, '\u2061'));
+      nodes.push(createElement('mspace', { key: `${i}-space`, width: '0.16em' }));
+      continue;
+    }
     if (/^\d+\/\d+$/.test(token)) {
       const [numerator, denominator] = token.split('/');
       node = denominator === '1' ? atom(numerator) : createElement('mfrac', null, atom(numerator), atom(denominator));
     } else if (token === '√' && /^\d/.test(tokens[i + 1] ?? '')) {
       node = createElement('msqrt', null, atom(tokens[++i]));
-    } else if (/^(?:\d|[xyn])/.test(token)) {
+    } else if (/^(?:\d|[xynA-Zθ])/.test(token)) {
       node = atom(token);
     } else {
       nodes.push(createElement('mo', { key: i }, token === '-' ? '−' : token));
@@ -34,9 +40,9 @@ function expression(text: string): ReactNode[] {
 // Render whole mathematical runs, while preserving the surrounding Korean prose.
 // Single-character MathML identifiers use a mathematical italic font; numbers stay upright.
 export function MathText({ text }: { text: string }) {
-  const parts = text.split(/([√\d.xyn()+−\-×÷=^²³?/ ]+)/g);
+  const parts = text.split(/((?:(?:sin|cos|tan)(?=\s*[A-Zxynθ])|[√\d.xynA-Zθ()+−\-×÷=^²³?/ ])+)/g);
   return <>{parts.map((part, index) => {
-    if (!/[xyn^²³]|√\d|\d+\/\d+/.test(part)) return <Fragment key={index}>{part}</Fragment>;
+    if (!/sin|cos|tan|[xynA-Zθ^²³]|√\d|\d+\/\d+/.test(part)) return <Fragment key={index}>{part}</Fragment>;
     const leading = part.match(/^[., ]*/)![0];
     const trailing = part.match(/[., ]*$/)![0];
     const math = part.slice(leading.length, part.length - trailing.length);
