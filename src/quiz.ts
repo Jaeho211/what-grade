@@ -114,9 +114,14 @@ export function nextQuestion(responses: Response[], random = Math.random): Quest
   const target = targetGrade(responses);
   const distance = Math.min(...remaining.map(q => Math.abs(q.level - target)));
   const nearby = remaining.filter(q => Math.abs(q.level - target) === distance);
-  // Prefer domains without successful evidence, then balance attempts and concepts.
-  const freshConcepts = nearby.filter(q => q.concept !== responses.at(-1)?.question.concept);
-  const eligible = freshConcepts.length ? freshConcepts : nearby;
+  // Exhaust unseen concepts at the target level before revisiting any concept,
+  // regardless of whether earlier attempts were correct, skipped, or timed out.
+  const countConcept = (q: Question) => responses.filter(r => r.question.concept === q.concept).length;
+  const fewestConceptAttempts = Math.min(...nearby.map(countConcept));
+  const leastUsedConcepts = nearby.filter(q => countConcept(q) === fewestConceptAttempts);
+  const freshConcepts = leastUsedConcepts.filter(q => q.concept !== responses.at(-1)?.question.concept);
+  const eligible = freshConcepts.length ? freshConcepts : leastUsedConcepts;
+  // Within that pool, prefer domains without successful evidence, then balance attempts.
   const confirmedDomains = levelEvidence(responses, target).domains;
   const unconfirmed = eligible.filter(q => !confirmedDomains.has(q.domain));
   const domainPool = unconfirmed.length ? unconfirmed : eligible;
