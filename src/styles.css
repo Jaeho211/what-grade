@@ -114,3 +114,11 @@ summary { min-height: 56px; font-size: 15px; }
 .review-heading span { font-size: 12px; color: #75836c; }
 .result-actions { margin-top: 30px; }
 @media (max-width: 760px) { .quiz.panel { padding-bottom: 30px; } .timer { margin-top: -10px; } }
+
+.math-notation {
+  display: inline math;
+  font-family: 'Cambria Math', 'STIX Two Math', 'Noto Sans Math', math;
+  font-size: 1em;
+  font-weight: normal;
+  white-space: nowrap;
+}

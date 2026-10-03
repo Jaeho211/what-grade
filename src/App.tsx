@@ -1,3 +1,4 @@
+import { MathText } from './MathText';
 import { createRoundClock, formatTime, QUESTION_SECONDS } from './round-clock';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { correct, nextQuestion, result, TOTAL, type Question, type Response } from './quiz';
@@ -90,9 +91,9 @@ export default function App() {
         </div>
         {expired && <p className="timeout-message" role="status">앗, 시간 끝! 다음으로 넘어가요.</p>}
         <span className="question-label">QUESTION {String(responses.length + 1).padStart(2, '0')}</span>
-        <h1 className="question" ref={heading} tabIndex={-1}>{question.prompt}</h1>
+        <h1 className="question" ref={heading} tabIndex={-1}><MathText text={question.prompt} /></h1>
         <p className="question-help" id="choice-help">보기를 누르면 바로 다음 문제로 넘어가요.</p>
-        <div className="choices" role="group" aria-label="답 선택" aria-describedby="choice-help">{question.choices.map((choice, i) => <button key={`${question.id}-${i}`} className="choice" disabled={expired} onClick={() => submit(i)}><span className="choice-number">{i + 1}</span>{choice}</button>)}</div>
+        <div className="choices" role="group" aria-label="답 선택" aria-describedby="choice-help">{question.choices.map((choice, i) => <button key={`${question.id}-${i}`} className="choice" disabled={expired} onClick={() => submit(i)}><span className="choice-number">{i + 1}</span><MathText text={choice} /></button>)}</div>
         <p className="fine center">시간이 끝나면 자동으로 넘어가요. 정답은 끝나고 확인!</p>
       </section>}
       {screen === 'result' && <section className="results">
@@ -100,7 +101,7 @@ export default function App() {
         {summary.timeouts > 0 && <p className="fine center">시간 초과 {summary.timeouts}문제 · 이번엔 조금 더 빠르게!</p>}
         <div className="result-actions"><button className="primary" onClick={start}>{summary.grade === 9 ? '중3 한 번 더 도전! ↻' : '한 학년 더 올라갈까? ↻'}</button><button className="secondary" onClick={share}>친구에게 도전장 보내기 ↗</button></div><p className="notice" role="status">{notice}</p>
         {notice.startsWith('공유하지') && <textarea className="share-fallback" readOnly value={shareText} aria-label="복사할 결과 문구" onFocus={e => e.target.select()} />}
-        <details className="review"><summary className="review-heading">정답 확인 <span>{TOTAL}문제</span></summary><div>{responses.map((response, i) => <details key={response.question.id}><summary><span className={correct(response) ? 'right' : 'wrong'}>{correct(response) ? '✓' : '−'}</span><span>{i + 1}. {response.question.prompt}</span><span className="expand">＋</span></summary><div className="explanation"><p>내 답: {response.selected === null ? (response.timedOut ? '시간 초과' : '넘어가기') : response.question.choices[response.selected]}</p><p><strong>정답: {response.question.choices[response.question.answer]}</strong></p><p>{response.question.explanation}</p></div></details>)}</div></details>
+        <details className="review"><summary className="review-heading">정답 확인 <span>{TOTAL}문제</span></summary><div>{responses.map((response, i) => <details key={response.question.id}><summary><span className={correct(response) ? 'right' : 'wrong'}>{correct(response) ? '✓' : '−'}</span><span>{i + 1}. <MathText text={response.question.prompt} /></span><span className="expand">＋</span></summary><div className="explanation"><p>내 답: {response.selected === null ? (response.timedOut ? '시간 초과' : '넘어가기') : <MathText text={response.question.choices[response.selected]} />}</p><p><strong>정답: <MathText text={response.question.choices[response.question.answer]} /></strong></p><p><MathText text={response.question.explanation} /></p></div></details>)}</div></details>
       </section>}
     </main><footer><span>몇 학년? · 도전하는 재미</span><span>수학 편 / 초등~중학교</span></footer>
   </div>;
