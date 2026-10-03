@@ -59,3 +59,16 @@ npm run deploy
 정적 파일 전용 배포에서 Worker+Assets 구성으로 변경했으므로 `npm run deploy`로 재배포해야 적용된다. 기존 Cloudflare Git 자동 빌드가 있다면 이 커밋을 배포한다.
 
 텍스트 마스크를 다시 만들려면 SIL OFL의 Noto Sans CJK KR 폰트로 `python tools/build-share-glyphs.py /path/to/NotoSansCJKkr-Regular.otf`를 실행한다. 생성 마스크는 `worker/share-glyphs.ts`에 저장된다.
+
+## 홈 화면 설치 (PWA)
+
+HTTPS로 배포된 사이트에서 시작·결과 화면의 **홈 화면에 설치하기**를 누릅니다.
+- Android Chrome: 설치 창이 지원되면 바로 표시합니다. 지원되지 않으면 브라우저 메뉴의 **앱 설치 / 홈 화면에 추가**를 안내합니다.
+- iPhone Safari: **공유 → 홈 화면에 추가**로 설치합니다.
+- 설치 후에는 홈 화면 아이콘에서 주소창 없는 독립 화면으로 실행합니다.
+
+`vite-plugin-pwa`가 manifest와 서비스 워커를 생성합니다. 앱 이름·시작 주소·아이콘은 `vite.config.ts`, 아이콘은 `public/`, 설치 및 업데이트 UI는 `src/PwaControls.tsx`에 있습니다. 첫 온라인 방문에서 서비스 워커의 캐시 저장이 완료된 뒤에는 기본 퀴즈를 오프라인으로 실행할 수 있습니다. 서버가 생성하는 `/share/` 및 `/share-card/` 주소와 온라인 공유 기능은 인터넷 연결이 필요합니다.
+
+새 버전은 자동으로 활성화하거나 화면을 새로고침하지 않습니다. 시작·결과 화면에 표시되는 **업데이트** 버튼을 누르면 적용됩니다. 문제 풀이 중에는 설치·업데이트 UI를 숨깁니다.
+
+검증: `npm run build`로 `dist/manifest.webmanifest`, `dist/sw.js`, PNG 아이콘이 생성되는지 확인합니다. 실제 휴대폰에서 설치, 독립 화면 실행, 첫 방문 후 오프라인 퀴즈, 새 배포 후 퀴즈 중 화면 유지 및 결과 화면 업데이트를 확인합니다.

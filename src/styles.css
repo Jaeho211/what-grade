@@ -160,3 +160,7 @@ summary { min-height: 56px; font-size: 15px; }
 .math-unit { display: inline-block; white-space: nowrap; letter-spacing: normal; }
 .math-notation { font-weight: 400; font-style: normal; letter-spacing: normal; }
 .question .math-unit { margin-inline: .035em; }
+
+.pwa-controls { margin: 24px auto; max-width: 640px; text-align: center; padding: 0 16px; }
+.pwa-controls p { font-size: 14px; line-height: 1.7; color: #526056; }
+.pwa-controls .secondary { margin: 8px; }

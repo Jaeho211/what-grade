@@ -1,3 +1,4 @@
+import { PwaControls } from './PwaControls';
 import { parseSharedRecord, sharePath, shareTitle, shareDescription } from './share';
 import { levelLabel } from './quiz';
 import { MathText } from './MathText';
@@ -115,6 +116,7 @@ export default function App() {
         {notice.startsWith('공유하지') && <textarea className="share-fallback" readOnly value={shareText} aria-label="복사할 결과 문구" onFocus={e => e.target.select()} />}
         <details className="review"><summary className="review-heading">정답 확인 <span>{TOTAL}문제</span></summary><div>{responses.map((response, i) => <details key={response.question.id}><summary><span className={correct(response) ? 'right' : 'wrong'}>{correct(response) ? '✓' : '−'}</span><span>{i + 1}. <MathText text={response.question.prompt} /></span><span className="expand">＋</span></summary><div className="explanation"><p>내 답: {response.selected === null ? (response.timedOut ? '시간 초과' : '건너뛰기') : <MathText text={response.question.choices[response.selected]} />}</p><p><strong>정답: <MathText text={response.question.choices[response.question.answer]} /></strong></p><p><MathText text={response.question.explanation} /></p></div></details>)}</div></details>
       </section>}
+      <PwaControls hidden={screen === 'quiz'} />
     </main><footer><span>몇 학년? · 도전하는 재미</span><span>수학 편 / 초등~고1</span></footer>
   </div>;
 }
