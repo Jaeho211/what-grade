@@ -1,4 +1,5 @@
 import type { Question } from './quiz';
+import { generateConceptQuestion } from './concept-question';
 
 function reducedFraction(numerator: number, denominator: number): string {
   let a = numerator, b = denominator;
@@ -9,6 +10,7 @@ function reducedFraction(numerator: number, denominator: number): string {
 
 // Work in integers (tenths for decimals) so answers never contain rounding noise.
 export function generateQuestion(template: Question, random = Math.random): Question {
+  if (template.level >= 7) return generateConceptQuestion(template, random);
   const int = (min: number, max: number) => min + Math.min(max - min, Math.floor(random() * (max - min + 1)));
   const decimal = (tenths: number) => (tenths / 10).toFixed(1);
   const numeric = (prompt: string, value: number, explanation: string, step = 1, format: (value: number) => string = String): Question => ({
@@ -83,48 +85,6 @@ export function generateQuestion(template: Question, random = Math.random): Ques
       return { ...template, prompt: `${a}/${d} ÷ ${b} = ?`, choices, answer: 0,
         explanation: `${b}로 나누는 것은 1/${b}을 곱하는 것과 같습니다. ${a}/${d} × 1/${b} = ${rawAnswer}입니다.${reduction}` };
     }
-    case '정수의 덧셈': {
-      const a = -int(2, 20), b = int(2, 25);
-      return numeric(`(${a}) + ${b} = ?`, a + b, `${b}에서 ${-a}을(를) 빼면 ${a + b}입니다.`);
-    }
-    case '일차방정식': {
-      const a = int(2, 9), x = int(1, 12), b = int(1, 15), c = a * x + b;
-      return numeric(`${a}x + ${b} = ${c}에서 x는?`, x, `${a}x = ${c - b}이므로 x = ${x}입니다.`);
-    }
-    case '정비례': {
-      const a = int(2, 8), x = int(2, 12), y = a * x;
-      return numeric(`y = ${a}x에서 x = ${x}일 때 y는?`, y, `y = ${a} × ${x} = ${y}입니다.`);
-    }
-    case '지수법칙': {
-      const base = int(2, 5), a = int(2, 6), b = int(2, 6);
-      return numeric(`${base}^${a} × ${base}^${b} = ${base}^n에서 n은?`, a + b,
-        `밑이 같은 거듭제곱을 곱하면 지수를 더합니다. n = ${a} + ${b} = ${a + b}입니다.`);
-    }
-    case '연립일차방정식': {
-      const y = int(1, 8), x = y + int(1, 8);
-      return numeric(`x + y = ${x + y}, x − y = ${x - y}에서 x는?`, x,
-        `두 식을 더하면 2x = ${2 * x}이므로 x = ${x}입니다.`);
-    }
-    case '피타고라스 정리': {
-      const triples = [[3, 4, 5], [5, 12, 13], [8, 15, 17]];
-      const [a, b, c] = triples[int(0, 2)], scale = int(1, 5);
-      return numeric(`직각삼각형의 두 직각변이 ${a * scale}, ${b * scale}일 때 빗변의 길이는?`, c * scale,
-        `빗변의 제곱은 ${a * scale}² + ${b * scale}² = ${(c * scale) ** 2}이므로 길이는 ${c * scale}입니다.`);
-    }
-    case '제곱근': {
-      const n = int(2, 20);
-      return numeric(`√${n * n} = ?`, n, `√는 음이 아닌 제곱근을 뜻합니다. ${n}² = ${n * n}이므로 답은 ${n}입니다.`);
-    }
-    case '이차방정식': {
-      const n = int(2, 15);
-      return numeric(`x² = ${n * n}의 양수인 해는?`, n,
-        `해는 −${n}, ${n}이며, 양수인 해는 ${n}입니다.`);
-    }
-    case '이차함수': {
-      const a = int(1, 4), x = -int(2, 9), y = a * x * x;
-      return numeric(`y = ${a}x²에서 x = ${x}일 때 y는?`, y,
-        `y = ${a} × (${x})² = ${y}입니다.`);
-    }
     case '모양 찾기': {
       const names = ['삼각형', '사각형', '오각형', '육각형'];
       const index = int(0, 1), sides = index + 3;
@@ -173,37 +133,6 @@ export function generateQuestion(template: Question, random = Math.random): Ques
       const percent = int(1, 9) * 10, total = int(2, 10) * 10;
       return numeric(`${total}의 ${percent}%는?`, total * percent / 100, `${total} × ${percent}/100 = ${total * percent / 100}입니다.`);
     }
-    case '삼각형의 내각': {
-      const a = int(3, 7) * 10, b = int(3, 7) * 10;
-      return numeric(`삼각형의 두 내각이 ${a}°, ${b}°입니다. 나머지 내각은 몇 도인가요?`, 180 - a - b, `내각의 합은 180°이므로 ${180 - a - b}°입니다.`, 10);
-    }
-    case '중앙값': {
-      const a = int(5, 30), d = int(1, 5);
-      return numeric(`${a + d}, ${a - d}, ${a}의 중앙값은?`, a, `크기순으로 정렬했을 때 가운데 값은 ${a}입니다.`);
-    }
-    case '일차함수의 기울기': {
-      const a = int(2, 9), b = int(1, 15);
-      return numeric(`일차함수 y = ${a}x + ${b}의 기울기는?`, a, `x의 계수가 기울기이므로 ${a}입니다.`);
-    }
-    case '확률': {
-      const red = int(1, 7), blue = int(1, 7), total = red + blue;
-      const answer = reducedFraction(red, total);
-      return { ...template, prompt: `빨간 공 ${red}개와 파란 공 ${blue}개에서 공 하나를 무작위로 뽑을 때 빨간 공일 확률은?`, choices: [answer, '0', '1', reducedFraction(red, total + 1)], answer: 0, explanation: `전체 ${total}개 중 빨간 공이 ${red}개이므로 확률은 ${answer}입니다.` };
-    }
-    case '인수분해': {
-      const a = int(2, 9);
-      return numeric(`x² + ${2 * a}x + ${a * a} = (x + a)²일 때 a는?`, a, `완전제곱식에서 x의 계수는 2a이므로 a = ${a}입니다.`);
-    }
-    case '삼각비': {
-      const triples = [[3, 4, 5], [5, 12, 13], [8, 15, 17]];
-      const [a, b, c] = triples[int(0, 2)], scale = int(1, 5);
-      const answer = reducedFraction(a, c);
-      return { ...template, prompt: `직각삼각형에서 각 A의 맞은편 변이 ${a * scale}, 빗변이 ${c * scale}입니다. sin A는?`, choices: [answer, reducedFraction(b, c), reducedFraction(a, b), reducedFraction(c, a)], answer: 0, explanation: `sin A = 맞은편 변 ÷ 빗변 = ${answer}입니다.` };
-    }
-    case '분산': {
-      const a = int(5, 20), d = int(1, 6), variance = d * d;
-      return numeric(`두 자료 ${a - d}, ${a + d}의 분산은?`, variance, `평균은 ${a}, 편차는 −${d}, ${d}입니다. 편차의 제곱의 평균은 ${variance}입니다.`);
-    }
     case '수 비교': {
       const a = int(10, 80), b = a + int(1, 9);
       return numeric(`${a}와 ${b} 중 더 큰 수는?`, b, `${b}가 ${a}보다 크므로 답은 ${b}입니다.`);
@@ -227,84 +156,6 @@ export function generateQuestion(template: Question, random = Math.random): Ques
     case '비례식': {
       const a = int(2, 9), b = int(2, 9), scale = int(2, 5);
       return numeric(`${a} : ${b} = ${a * scale} : □에서 □에 들어갈 수는?`, b * scale, `앞 항이 ${scale}배가 되었으므로 뒤 항도 ${scale}배인 ${b * scale}입니다.`);
-    }
-    case '정수의 곱셈': {
-      const a = int(2, 12), b = int(2, 9);
-      return numeric(`(−${a}) × (−${b}) = ?`, a * b, `음수끼리 곱하면 양수이므로 ${a * b}입니다.`);
-    }
-    case '다각형의 내각의 합': {
-      const n = int(5, 12);
-      return numeric(`${n}각형의 내각의 합은 몇 도인가요?`, (n - 2) * 180, `(${n} − 2) × 180 = ${(n - 2) * 180}°입니다.`, 180);
-    }
-    case '일차부등식': {
-      const a = int(2, 6), k = int(3, 10), b = int(1, 9);
-      return numeric(`${a}x + ${b} < ${a * k + b}를 만족하는 가장 큰 정수 x는?`, k - 1, `x < ${k}이므로 가장 큰 정수는 ${k - 1}입니다.`);
-    }
-    case '닮음비': {
-      const a = int(2, 5), scale = int(2, 4), length = a * int(2, 6);
-      return numeric(`두 삼각형의 닮음비가 1 : ${scale}입니다. 작은 삼각형의 한 변이 ${length}cm이면 대응하는 큰 변은 몇 cm인가요?`, length * scale, `대응하는 길이는 ${scale}배이므로 ${length * scale}cm입니다.`);
-    }
-    case '근호의 계산': {
-      const n = int(2, 8), m = int(2, 7), base = [2, 3, 5, 7][int(0, 3)];
-      return numeric(`√${n * n * base} + √${m * m * base} = n√${base}일 때 n은?`, n + m, `각 근호를 정리하면 ${n}√${base} + ${m}√${base}이므로 계수는 ${n + m}입니다.`);
-    }
-    case '이차방정식의 두 근': {
-      const a = int(2, 8), b = a + int(1, 7);
-      return numeric(`x² − ${a + b}x + ${a * b} = 0의 두 근 중 큰 것은?`, b, `(x − ${a})(x − ${b}) = 0이므로 두 근 중 큰 것은 ${b}입니다.`);
-    }
-    case '이차함수의 꼭짓점': {
-      const h = int(2, 6), k = int(2, 9);
-      return numeric(`y = x² − ${2 * h}x + ${h * h + k}의 최솟값은?`, k, `y = (x − ${h})² + ${k}이므로 최솟값은 ${k}입니다.`);
-    }
-    case '삼각비로 길이 구하기': {
-      const triples = [[3, 4, 5], [5, 12, 13], [8, 15, 17]];
-      const [a, , c] = triples[int(0, 2)], scale = int(2, 6);
-      return numeric(`직각삼각형에서 sin A = ${a}/${c}, 빗변의 길이는 ${c * scale}cm입니다. 각 A의 맞은편 변은 몇 cm인가요?`, a * scale, `맞은편 변 = 빗변 × sin A = ${a * scale}cm입니다.`);
-    }
-    case '표준편차': {
-      const a = int(10, 30), d = int(2, 8);
-      return numeric(`두 자료 ${a - d}, ${a + d}의 표준편차는?`, d, `평균은 ${a}, 분산은 ${d * d}이므로 표준편차는 ${d}입니다.`);
-    }
-    case '나머지정리': {
-      const a = int(1, 4), b = int(1, 5), c = int(1, 8), k = int(1, 3);
-      const remainder = a * k * k + b * k + c;
-      return numeric(`다항식 ${a}x² + ${b}x + ${c}을 x − ${k}로 나눈 나머지는?`, remainder,
-        `나머지정리에 따라 x = ${k}를 대입하면 ${a} × ${k}² + ${b} × ${k} + ${c} = ${remainder}입니다.`);
-    }
-    case '판별식': {
-      const a = int(1, 3), h = int(2, 6), b = 2 * a * h, k = a * h * h;
-      return numeric(`${a}x² − ${b}x + k = 0이 실수 범위에서 중근을 가질 때 k는?`, k,
-        `판별식이 0이므로 ${b}² − 4 × ${a} × k = 0입니다. 따라서 k = ${k}입니다.`);
-    }
-    case '복소수의 계산': {
-      const a = int(1, 6), b = int(1, 6);
-      return numeric(`i² = −1일 때 (${a} + i)(${b} − i)의 실수 부분은?`, a * b + 1,
-        `전개하면 ${a * b} + (${b} − ${a})i − i²입니다. 실수 부분은 ${a * b} + 1 = ${a * b + 1}입니다.`);
-    }
-    case '조합': {
-      const n = int(4, 15), value = n * (n - 1) / 2;
-      return numeric(`서로 다른 ${n}명 중 대표 2명을 순서 없이 고르는 방법은 몇 가지인가요?`, value,
-        `${n} × ${n - 1}을 순서가 겹치는 2가지로 나누면 ${value}가지입니다.`);
-    }
-    case '집합의 원소 수': {
-      const common = int(1, 4), onlyA = int(1, 6), onlyB = int(1, 6), value = onlyA + onlyB + common;
-      return numeric(`집합 A의 원소가 ${onlyA + common}개, B의 원소가 ${onlyB + common}개이고 공통 원소가 ${common}개입니다. 합집합의 원소는 몇 개인가요?`, value,
-        `공통 원소를 한 번 빼면 ${onlyA + common} + ${onlyB + common} − ${common} = ${value}개입니다.`);
-    }
-    case '합성함수': {
-      const a = int(2, 4), b = int(1, 6), k = int(2, 4), value = a * k * k + b;
-      return numeric(`f(x) = ${a}x + ${b}, g(x) = x²일 때 f(g(${k}))는?`, value,
-        `g(${k}) = ${k * k}이므로 f(${k * k}) = ${a} × ${k * k} + ${b} = ${value}입니다.`);
-    }
-    case '역함수': {
-      const a = int(2, 5), b = int(1, 8), x = int(2, 8), y = a * x + b;
-      return numeric(`실수 전체에서 f(x) = ${a}x + ${b}입니다. 역함수가 ${y}를 입력받으면 출력은?`, x,
-        `${a}x + ${b} = ${y}를 풀면 x = ${x}입니다. 역함수는 입력과 출력을 되돌립니다.`);
-    }
-    case '원의 방정식': {
-      const h = int(1, 6), k = int(1, 6), r = int(2, 9);
-      return numeric(`원 (x − ${h})² + (y − ${k})² = ${r * r}의 반지름은?`, r,
-        `원의 방정식 오른쪽은 반지름의 제곱입니다. 반지름은 √${r * r} = ${r}입니다.`);
     }
     default: throw new Error(`지원하지 않는 문제 유형: ${template.concept}`);
   }

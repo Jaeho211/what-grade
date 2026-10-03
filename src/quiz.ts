@@ -48,7 +48,7 @@ addedConcepts.push(...challengeConcepts, ...highConcepts);
 const extra: Question[] = addedConcepts.flatMap(([level, concept, domain, expectedMs]) =>
   Array.from({ length: 4 }, (_, slot) => ({
     id: `math-extra-${level}-${concept}-${slot + 1}`, schoolLevel: level <= 6 ? 'elementary' as const : level <= 9 ? 'middle' as const : 'high' as const,
-    grade: level <= 6 ? level : level <= 9 ? level - 6 : level - 9, level, concept, domain, expectedMs,
+    grade: level <= 6 ? level : level <= 9 ? level - 6 : level - 9, level, concept, domain, expectedMs: level >= 7 ? 17000 : expectedMs,
     challenge: level === 10 || challengeConcepts.some(([, name]) => name === concept),
     prompt: '', choices: [], answer: 0, explanation: '',
   })));

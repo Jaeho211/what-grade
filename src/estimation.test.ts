@@ -40,7 +40,7 @@ describe('new problem generators', () => {
     let seed = 42;
     const rng = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 2 ** 32);
     const old = ['정수의 덧셈', '일차방정식', '정비례', '지수법칙', '연립일차방정식', '피타고라스 정리', '제곱근', '이차방정식', '이차함수'];
-    for (const template of questions.filter(q => q.id.startsWith('math-extra-') && q.schoolLevel !== 'high' && !old.includes(q.concept))) {
+    for (const template of questions.filter(q => q.id.startsWith('math-extra-') && q.schoolLevel === 'elementary' && !old.includes(q.concept))) {
       for (let i = 0; i < 50; i++) {
         const q = generateQuestion(template, rng);
         const n = (q.prompt.match(/-?\d+/g) ?? []).map(Number);

@@ -1,9 +1,9 @@
 import { createElement, Fragment, type ReactNode } from 'react';
 
 function expression(text: string): ReactNode[] {
-  const tokens = text.match(/sin|cos|tan|\d+\/\d+|\d+(?:\.\d+)?|[fgikxynA-Zθ]|√|\^|[²³]|[^\s]/g) ?? [];
+  const tokens = text.match(/sin|cos|tan|\d+\/\d+|\d+(?:\.\d+)?|[abfgikxynA-Zθ]|√|\^|[²³]|[^\s]/g) ?? [];
   const nodes: ReactNode[] = [];
-  const atom = (token: string) => createElement(/^[fgikxynA-Zθ]$/.test(token) ? 'mi' : 'mn', null, token);
+  const atom = (token: string) => createElement(/^[abfgikxynA-Zθ]$/.test(token) ? 'mi' : 'mn', null, token);
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
     let node: ReactNode;
@@ -26,7 +26,7 @@ function expression(text: string): ReactNode[] {
             createElement('path', { d: 'M1 24 L6 21 L10 36 L18 2 L20 2', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinejoin: 'round' })),
           createElement('span', { className: 'math-radicand' }, radicand)));
 
-    } else if (/^(?:\d|[fgikxynA-Zθ])/.test(token)) {
+    } else if (/^(?:\d|[abfgikxynA-Zθ])/.test(token)) {
       node = atom(token);
     } else {
       nodes.push(createElement('mo', { key: i }, token === '-' ? '−' : token));
@@ -48,9 +48,9 @@ function expression(text: string): ReactNode[] {
 // Render whole mathematical runs, while preserving the surrounding Korean prose.
 // Single-character MathML identifiers use a mathematical italic font; numbers stay upright.
 export function MathText({ text }: { text: string }) {
-  const parts = text.split(/((?:(?:sin|cos|tan)(?=\s*[A-Zxynθ])|[√\d.fgikxynA-Zθ()+−\-×÷=^²³?/ ])+)/g);
+  const parts = text.split(/((?:(?:sin|cos|tan)(?=\s*[A-Zxynθ])|[√\d.abfgikxynA-Zθ()+−\-×÷=^²³?/ ])+)/g);
   return <>{parts.map((part, index) => {
-    if (!/sin|cos|tan|[fgikxynA-Zθ^²³]|√\d|\d+\/\d+/.test(part)) return <Fragment key={index}>{part}</Fragment>;
+    if (!/sin|cos|tan|[abfgikxynA-Zθ^²³]|√\d|\d+\/\d+/.test(part)) return <Fragment key={index}>{part}</Fragment>;
     const leading = part.match(/^[., ]*/)![0];
     const trailing = part.match(/[., ]*$/)![0];
     const math = part.slice(leading.length, part.length - trailing.length);
