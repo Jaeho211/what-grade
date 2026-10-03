@@ -36,7 +36,8 @@ npm run deploy
 - `src/question-generator.ts`: 12개 유형의 숫자·정답·보기·해설을 학년별 범위 안에서 무작위 생성
 - `data/questions/math/grade-1.json` ~ `grade-6.json`: 출제 슬롯과 학년·개념 메타데이터 (고정 문항은 런타임에 생성 문항으로 대체)
 - [프로젝트 방향](docs/product-plan.md)
-- [교육과정 초안](docs/curriculum/elementary-math.md)
+- [초등 수학 교육과정 초안](docs/curriculum/elementary-math.md)
+- [중학교 수학 교육과정 및 확장 초안](docs/curriculum/middle-school-math.md)
 - [초기 출제 규칙](docs/quiz/level-estimation.md)
 
 문제 데이터는 구현 검증용 초안이다. 교과서·성취기준 대조와 사용자 응답 기반 난이도 검증은 아직 필요하다. 결과는 실제 학년이나 전체 수학 능력을 진단하지 않는다. 브라우저에서 채점하므로 경쟁 랭킹 도입 전 서버 채점이 필요하다.
