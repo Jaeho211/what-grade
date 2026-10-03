@@ -137,3 +137,18 @@ describe('middle-three challenge gate', () => {
     expect(result(evidence).grade).toBeLessThan(9);
   });
 });
+
+
+describe('recovery after an early mistake', () => {
+  it.each([0, 1])('can reach middle three after missing opening question %s', miss => {
+    const responses: Response[] = [];
+    for (let i = 0; i < 10; i++) {
+      const q = nextQuestion(responses, () => 0)!;
+      responses.push({ question: q, selected: i === miss ? (q.answer + 1) % 4 : q.answer });
+    }
+    expect(responses.slice(7).every(r => r.question.level === 9 && r.question.challenge)).toBe(true);
+    expect(result(responses).grade).toBe(9);
+    const failed = responses.map((r,i) => i === 9 ? { ...r, selected: null, skipped: true } : r);
+    expect(result(failed).grade).toBeLessThan(9);
+  });
+});

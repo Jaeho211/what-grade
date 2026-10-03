@@ -56,16 +56,30 @@ export function levelLabel(level: number): string {
 export const TOTAL = 10;
 export const correct = (response: Response) => response.selected === response.question.answer;
 
-// Two answers at one level are required before changing the target grade.
+// Pairs explore the level; a sustained recovery can earn one extra step.
 export function targetGrade(responses: Response[]): number {
   let grade = START_LEVEL;
-  for (let i = 0; i + 1 < responses.length; i += 2) {
-    const pair = responses.slice(i, i + 2);
-    if (pair.every(correct)) grade = Math.min(MAX_LEVEL, grade + 1);
-    else if (pair.every(r => !correct(r))) grade = Math.max(1, grade - 1);
+  let streak = 0, hadMiss = false, recoveryUsed = false;
+  for (let i = 0; i < responses.length; i++) {
+    if (correct(responses[i])) streak++;
+    else { streak = 0; hadMiss = true; }
+    if (i % 2 === 1) {
+      const pair = responses.slice(i - 1, i + 1);
+      if (pair.every(correct)) grade = Math.min(MAX_LEVEL, grade + 1);
+      else if (pair.every(r => !correct(r))) grade = Math.max(1, grade - 1);
+      if (hadMiss && !recoveryUsed && streak >= 3) {
+        grade = Math.min(MAX_LEVEL, grade + 1);
+        recoveryUsed = true;
+      }
+    }
   }
-  // Perfect opening earns three final middle-three challenges without extending the quiz.
-  if (responses.length >= 7 && responses.slice(0, 7).every(correct)) return MAX_LEVEL;
+  // Once middle-two is solved after a strong recent streak, reserve the final three challenges.
+  // Past mistakes do not lock the player out; the advanced answers still decide the result.
+  if (responses.length >= 7) {
+    const opening = responses.slice(0, 7);
+    const last = opening.at(-1)!;
+    if (last.question.level >= 8 && correct(last) && opening.slice(-3).every(correct)) return MAX_LEVEL;
+  }
   return grade;
 }
 
