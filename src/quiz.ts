@@ -62,7 +62,13 @@ export function levelLabel(level: number): string {
 export const TOTAL = 10;
 export const correct = (response: Response) => response.selected === response.question.answer;
 
-// Pairs explore the level; a sustained recovery can earn one extra step.
+// Speed accelerates exploration only after two correct answers at the same level.
+const fastCorrect = (response: Response) => correct(response)
+  && !response.timedOut && !response.skipped
+  && response.elapsedMs !== undefined && response.elapsedMs >= 1000
+  && response.elapsedMs <= (response.question.expectedMs ?? 10000) / 2;
+
+// Pairs explore the level; speed and recovery never stack beyond two steps.
 export function targetGrade(responses: Response[]): number {
   let grade = START_LEVEL;
   let streak = 0, hadMiss = false, recoveryUsed = false;
@@ -71,16 +77,17 @@ export function targetGrade(responses: Response[]): number {
     else { streak = 0; hadMiss = true; }
     if (i % 2 === 1) {
       const pair = responses.slice(i - 1, i + 1);
-      if (pair.every(correct)) grade = Math.min(MAX_LEVEL, grade + 1);
+      const accelerated = pair[0].question.level === pair[1].question.level && pair.every(fastCorrect);
+      if (pair.every(correct)) grade = Math.min(MAX_LEVEL, grade + (accelerated ? 2 : 1));
       else if (pair.every(r => !correct(r))) grade = Math.max(1, grade - 1);
       if (hadMiss && !recoveryUsed && streak >= 3) {
-        grade = Math.min(MAX_LEVEL, grade + 1);
+        if (!accelerated) grade = Math.min(MAX_LEVEL, grade + 1);
         recoveryUsed = true;
       }
     }
   }
   // A strong opening earns a middle-three checkpoint before the high-school challenge.
-  if (responses.length === 6 && responses.slice(-3).every(correct) && responses.at(-1)!.question.level >= 7) return 9;
+  if (responses.length === 6 && responses.slice(-3).every(correct) && responses.at(-1)!.question.level >= 7) return Math.max(9, grade);
   // Reserve three diverse challenges; an early recovery can still finish at middle three.
   // Past mistakes do not lock the player out; the advanced answers still decide the result.
   if (responses.length >= 7) {
