@@ -143,3 +143,8 @@ summary { min-height: 56px; font-size: 15px; }
 .explanation .math-fraction { font-size: 1.15em; }
 .review summary:has(.math-fraction) { min-height: 74px; }
 @media (min-width: 761px) and (max-width: 1366px) { .fraction-question .choice { min-height: 100px; } }
+
+.shared-record { margin: 24px 0; padding: 20px; border: 1px solid #dfe6d6; border-radius: 14px; background: #ecf1e5; }
+.shared-record span { display: block; font-size: 12px; color: #657062; }
+.shared-record strong { display: block; margin-top: 8px; font-size: 28px; color: #285943; }
+.shared-record p { margin: 8px 0 0; font-size: 14px; line-height: 1.7; }

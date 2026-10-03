@@ -1,3 +1,5 @@
+import { parseSharedRecord, sharePath, shareTitle, shareDescription } from './share';
+import { levelLabel } from './quiz';
 import { MathText } from './MathText';
 import { createRoundClock, formatTime, QUESTION_SECONDS } from './round-clock';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -61,10 +63,13 @@ export default function App() {
   }, [screen, question, feedback, submit]);
   useEffect(() => () => { if (transition.current) clearTimeout(transition.current); }, []);
   const summary = result(responses);
-  const shareText = `나의 수학 나이는 ${summary.label}! 10문제 중 ${summary.score}개 정답 · ${formatTime(summary.elapsedMs)}. 당신은 몇 학년? 도전하기: ${window.location.origin}${window.location.pathname}`;
+  const sharedRecord = parseSharedRecord(window.location.pathname);
+  const shareRecord = { grade: summary.grade, score: summary.score, seconds: Math.min(200, Math.round(summary.elapsedMs / 1000)) };
+  const shareUrl = new URL(sharePath(shareRecord), window.location.origin).href;
+  const shareText = `나의 수학 나이는 ${summary.label}! 10문제 중 ${summary.score}개 정답 · ${formatTime(summary.elapsedMs)}. 당신은 몇 학년? 도전하기: ${shareUrl}`;
   async function share() {
     try {
-      if (navigator.share) await navigator.share({ title: '내 수학은 몇 학년?', text: shareText });
+      if (navigator.share) await navigator.share({ title: shareTitle(shareRecord), text: shareDescription(shareRecord), url: shareUrl });
       else { await navigator.clipboard.writeText(shareText); setNotice('결과를 복사했어요. 친구에게 보내보세요!'); }
     } catch (error) {
       if (!(error instanceof DOMException && error.name === 'AbortError')) setNotice('공유하지 못했어요. 아래 결과 문구를 직접 복사해주세요.');
@@ -76,6 +81,7 @@ export default function App() {
       {screen === 'intro' && <div className="intro">
         <section className="intro-copy"><span className="eyebrow">20-SECOND CHALLENGE · 수학 편</span>
           <h1 ref={heading} tabIndex={-1}>당신의 수학 나이는<br /><span>몇 학년?</span></h1>
+          {sharedRecord && <div className="shared-record" role="note"><span>친구가 공유한 수학 기록</span><strong>{levelLabel(sharedRecord.grade)}</strong><p>10문제 중 {sharedRecord.score}개 정답 · {sharedRecord.seconds}초</p><p>나는 몇 학년일까? 같은 도전에 참여해보세요!</p></div>}
           <p className="lead">분명 배웠는데, 20초 안에 풀 수 있을까?<br />10문제로 나의 수학 나이를 확인해보세요.</p>
           <div className="chips"><span>✦ 초등 1학년~중3</span><span>◷ 문제마다 20초</span><span>↗ 로그인 없이</span></div>
           <button className="primary start" onClick={start}>도전 시작 <span>→</span></button>
@@ -105,7 +111,7 @@ export default function App() {
         <p className="best-streak">✨ 최고 연속 정답 <strong>{summary.bestStreak}회</strong></p>
         {summary.skips > 0 && <p className="fine center">건너뛴 문제 {summary.skips}개 · 정답과 해설을 확인해보세요.</p>}
         {summary.timeouts > 0 && <p className="fine center">시간 초과 {summary.timeouts}문제 · 이번엔 조금 더 빠르게!</p>}
-        <div className="result-actions"><button className="primary" onClick={start}>다시 도전하기 ↻</button><button className="secondary" onClick={share}>친구에게 도전장 보내기 ↗</button></div><p className="notice" role="status">{notice}</p>
+        <div className="result-actions"><button className="primary" onClick={start}>다시 도전하기 ↻</button><button className="secondary" onClick={share}>자랑하기 ↗</button></div><p className="notice" role="status">{notice}</p>
         {notice.startsWith('공유하지') && <textarea className="share-fallback" readOnly value={shareText} aria-label="복사할 결과 문구" onFocus={e => e.target.select()} />}
         <details className="review"><summary className="review-heading">정답 확인 <span>{TOTAL}문제</span></summary><div>{responses.map((response, i) => <details key={response.question.id}><summary><span className={correct(response) ? 'right' : 'wrong'}>{correct(response) ? '✓' : '−'}</span><span>{i + 1}. <MathText text={response.question.prompt} /></span><span className="expand">＋</span></summary><div className="explanation"><p>내 답: {response.selected === null ? (response.timedOut ? '시간 초과' : '건너뛰기') : <MathText text={response.question.choices[response.selected]} />}</p><p><strong>정답: <MathText text={response.question.choices[response.question.answer]} /></strong></p><p><MathText text={response.question.explanation} /></p></div></details>)}</div></details>
       </section>}
