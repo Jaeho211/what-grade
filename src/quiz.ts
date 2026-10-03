@@ -73,11 +73,20 @@ export function nextQuestion(responses: Response[], random = Math.random): Quest
   return { ...question, choices: order.map(i => question.choices[i]), answer: order.indexOf(question.answer) };
 }
 
+export function streakStats(responses: Response[]) {
+  let current = 0, best = 0;
+  for (const response of responses) {
+    current = correct(response) ? current + 1 : 0;
+    best = Math.max(best, current);
+  }
+  return { current, best };
+}
+
 export function result(responses: Response[]) {
   const grade = targetGrade(responses);
   const low = Math.max(1, grade - 1);
   const high = Math.min(MAX_LEVEL, grade + 1);
   const strengths = [...new Set(responses.filter(correct).map(r => r.question.concept))];
   const practice = [...new Set(responses.filter(r => !correct(r)).map(r => r.question.concept))];
-  return { grade, label: levelLabel(grade), low, high, strengths, practice, elapsedMs: responses.reduce((sum, r) => sum + (r.elapsedMs ?? 0), 0), timeouts: responses.filter(r => r.timedOut).length, score: responses.filter(correct).length };
+  return { bestStreak: streakStats(responses).best, grade, label: levelLabel(grade), low, high, strengths, practice, elapsedMs: responses.reduce((sum, r) => sum + (r.elapsedMs ?? 0), 0), timeouts: responses.filter(r => r.timedOut).length, score: responses.filter(correct).length };
 }

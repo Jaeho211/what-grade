@@ -122,3 +122,17 @@ summary { min-height: 56px; font-size: 15px; }
   font-weight: normal;
   white-space: nowrap;
 }
+
+/* A fixed feedback slot avoids moving the question when a round settles. */
+.answer-feedback { height: 64px; line-height: 1.5; margin: -12px 0 18px; padding: 10px 12px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 14px; font-weight: 600; }
+.feedback-right { background: #edf3e6; color: #285943; }
+.feedback-wrong, .feedback-timeout { background: #f4efe2; color: #805a28; }
+.streak-badge { font-size: 12px; white-space: nowrap; }
+.choice.answered-right, .choice.answered-right:hover { border: 2px solid #3b7953; padding: 13px 17px; background: #edf3e6; }
+.choice.answered-wrong, .choice.answered-wrong:hover { border: 2px solid #987039; padding: 13px 17px; background: #f4efe2; }
+.quiz .choice:disabled { opacity: 1; cursor: default; transform: none; }
+.answer-mark { margin-left: auto; flex-shrink: 0; font-weight: 700; }
+.answered-right .answer-mark { color: #285943; }
+.answered-wrong .answer-mark { color: #805a28; }
+.best-streak { margin: 18px 0 0; text-align: center; color: #53684d; font-size: 14px; }
+@media (min-width: 761px) and (max-width: 1366px) { .choice.answered-right, .choice.answered-wrong, .choice.answered-right:hover, .choice.answered-wrong:hover { padding: 21px; } }

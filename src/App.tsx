@@ -1,14 +1,14 @@
 import { MathText } from './MathText';
 import { createRoundClock, formatTime, QUESTION_SECONDS } from './round-clock';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { correct, nextQuestion, result, TOTAL, type Question, type Response } from './quiz';
+import { correct, nextQuestion, result, streakStats, TOTAL, type Question, type Response } from './quiz';
 
 export default function App() {
   const [screen, setScreen] = useState<'intro' | 'quiz' | 'result'>('intro');
   const [responses, setResponses] = useState<Response[]>([]);
   const [question, setQuestion] = useState<Question>();
   const [remaining, setRemaining] = useState(QUESTION_SECONDS);
-  const [expired, setExpired] = useState(false);
+  const [feedback, setFeedback] = useState<{ selected: number | null; timedOut: boolean; right: boolean; streak: number } | null>(null);
   const clock = useRef<ReturnType<typeof createRoundClock> | null>(null);
   const activeQuestionId = useRef<string | null>(null);
   const transition = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -22,7 +22,7 @@ export default function App() {
     if (transition.current) clearTimeout(transition.current);
     const first = nextQuestion([]);
     activeQuestionId.current = first?.id ?? null;
-    setResponses([]); setQuestion(first); setNotice(''); setExpired(false);
+    setResponses([]); setQuestion(first); setNotice(''); setFeedback(null);
     clock.current = createRoundClock(); setRemaining(QUESTION_SECONDS); setScreen('quiz');
   }
   const submit = useCallback((answer: number | null) => {
@@ -31,7 +31,7 @@ export default function App() {
     if (!timing) return;
     const updated = [...responses, { question, ...timing }];
     const advance = () => {
-      setResponses(updated); setExpired(false);
+      setResponses(updated); setFeedback(null);
       if (updated.length === TOTAL) { activeQuestionId.current = null; clock.current = null; setScreen('result'); }
       else {
         const next = nextQuestion(updated);
@@ -39,13 +39,13 @@ export default function App() {
         clock.current = createRoundClock(); setRemaining(QUESTION_SECONDS); setQuestion(next);
       }
     };
-    if (timing.timedOut) {
-      setRemaining(0); setExpired(true);
-      transition.current = setTimeout(advance, 800);
-    } else advance();
+    const response = updated.at(-1)!;
+    setRemaining(clock.current.remaining());
+    setFeedback({ selected: timing.selected, timedOut: timing.timedOut, right: correct(response), streak: streakStats(updated).current });
+    transition.current = setTimeout(advance, timing.timedOut ? 800 : 400);
   }, [question, responses]);
   useEffect(() => {
-    if (screen !== 'quiz' || expired) return;
+    if (screen !== 'quiz' || feedback) return;
     const tick = () => {
       const seconds = clock.current?.remaining() ?? 0;
       setRemaining(seconds);
@@ -56,7 +56,7 @@ export default function App() {
     window.addEventListener('focus', tick);
     tick();
     return () => { clearInterval(timer); document.removeEventListener('visibilitychange', tick); window.removeEventListener('focus', tick); };
-  }, [screen, question, expired, submit]);
+  }, [screen, question, feedback, submit]);
   useEffect(() => () => { if (transition.current) clearTimeout(transition.current); }, []);
   const summary = result(responses);
   const shareText = `나의 수학 나이는 ${summary.label}! 10문제 중 ${summary.score}개 정답 · ${formatTime(summary.elapsedMs)}. 당신은 몇 학년? 도전하기: ${window.location.origin}${window.location.pathname}`;
@@ -89,15 +89,18 @@ export default function App() {
           <div className="timer-heading"><span>남은 시간</span><strong role="timer" aria-label={`남은 시간 ${remaining}초`}>{remaining}초</strong></div>
           <div className="timer-track"><div style={{ width: `${remaining / QUESTION_SECONDS * 100}%` }} /></div>
         </div>
-        {expired && <p className="timeout-message" role="status">앗, 시간 끝! 다음으로 넘어가요.</p>}
+        <div className={`answer-feedback ${feedback ? feedback.timedOut ? 'feedback-timeout' : feedback.right ? 'feedback-right' : 'feedback-wrong' : ''}`} role="status" aria-live="polite" aria-atomic="true">
+          {feedback && (feedback.timedOut ? <span>앗, 시간 끝! 다음으로 넘어가요.</span> : feedback.right ? <><span>✓ 정답!</span>{feedback.streak >= 3 && <span className="streak-badge">{feedback.streak}연속 정답</span>}</> : <span>아깝다! 다음 문제에 도전해요.</span>)}
+        </div>
         <span className="question-label">QUESTION {String(responses.length + 1).padStart(2, '0')}</span>
         <h1 className="question" ref={heading} tabIndex={-1}><MathText text={question.prompt} /></h1>
-        <p className="question-help" id="choice-help">보기를 누르면 바로 다음 문제로 넘어가요.</p>
-        <div className="choices" role="group" aria-label="답 선택" aria-describedby="choice-help">{question.choices.map((choice, i) => <button key={`${question.id}-${i}`} className="choice" disabled={expired} onClick={() => submit(i)}><span className="choice-number">{i + 1}</span><MathText text={choice} /></button>)}</div>
-        <p className="fine center">시간이 끝나면 자동으로 넘어가요. 정답은 끝나고 확인!</p>
+        <p className="question-help" id="choice-help">보기를 누르면 답이 확정돼요.</p>
+        <div className="choices" role="group" aria-label="답 선택" aria-describedby="choice-help">{question.choices.map((choice, i) => <button key={`${question.id}-${i}`} className={`choice ${feedback?.selected === i ? feedback.right ? 'answered-right' : 'answered-wrong' : ''}`} disabled={feedback !== null} onClick={() => submit(i)}><span className="choice-number">{i + 1}</span><MathText text={choice} />{feedback?.selected === i && <span className="answer-mark" aria-hidden="true">{feedback.right ? '✓' : '−'}</span>}</button>)}</div>
+        <p className="fine center">시간이 끝나면 자동으로 넘어가요. 해설은 끝나고 확인!</p>
       </section>}
       {screen === 'result' && <section className="results">
         <div className="result-hero"><span className="eyebrow">YOUR MATH MOMENT</span><div className="result-icon">✦</div><h1 ref={heading} tabIndex={-1}>당신의 수학 나이는</h1><p className="grade">{summary.label}</p><p className="lead">{summary.grade === 9 ? '중3까지 도달! 수학 감각 최고예요 🏆' : summary.grade >= 7 ? '중학교 수학도 거뜬하네요 😎' : summary.grade >= 5 ? '수학 감각, 아직 살아있네요 😎' : summary.grade >= 3 ? '오랜만인데 꽤 잘 풀었는데요! ✨' : '한 번 더! 이번엔 올라갈 수 있어요 🚀'}</p><span className="score">10문제 중 {summary.score}개 정답 · {formatTime(summary.elapsedMs)}</span><p className="fine">재미로 보는 수학 나이예요. 실제 학년이나 수학 능력을 의미하지 않아요.</p></div>
+        <p className="best-streak">✨ 최고 연속 정답 <strong>{summary.bestStreak}회</strong></p>
         {summary.timeouts > 0 && <p className="fine center">시간 초과 {summary.timeouts}문제 · 이번엔 조금 더 빠르게!</p>}
         <div className="result-actions"><button className="primary" onClick={start}>{summary.grade === 9 ? '중3 한 번 더 도전! ↻' : '한 학년 더 올라갈까? ↻'}</button><button className="secondary" onClick={share}>친구에게 도전장 보내기 ↗</button></div><p className="notice" role="status">{notice}</p>
         {notice.startsWith('공유하지') && <textarea className="share-fallback" readOnly value={shareText} aria-label="복사할 결과 문구" onFocus={e => e.target.select()} />}
