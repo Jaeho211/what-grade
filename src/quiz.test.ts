@@ -142,3 +142,15 @@ describe('fraction answer formatting', () => {
     }
   });
 });
+
+
+describe('skipped responses', () => {
+  it('records skips separately, completes the quiz, and uses unanswered level evidence', () => {
+    const responses = run('skip').map(r => ({ ...r, skipped: true, timedOut: false }));
+    expect(result(responses).skips).toBe(TOTAL);
+    expect(result(responses).timeouts).toBe(0);
+    expect(result(responses).score).toBe(0);
+    expect(targetGrade(responses)).toBe(1);
+    expect(nextQuestion(responses)).toBeUndefined();
+  });
+});

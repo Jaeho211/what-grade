@@ -25,11 +25,12 @@ export default function App() {
     setResponses([]); setQuestion(first); setNotice(''); setFeedback(null);
     clock.current = createRoundClock(); setRemaining(QUESTION_SECONDS); setScreen('quiz');
   }
-  const submit = useCallback((answer: number | null) => {
+  const submit = useCallback((answer: number | null, skip = false) => {
     if (!question || !clock.current || activeQuestionId.current !== question.id) return;
     const timing = clock.current.settle(answer);
     if (!timing) return;
-    const updated = [...responses, { question, ...timing }];
+    const skipped = skip && !timing.timedOut;
+    const updated = [...responses, { question, ...timing, skipped }];
     const advance = () => {
       setResponses(updated); setFeedback(null);
       if (updated.length === TOTAL) { activeQuestionId.current = null; clock.current = null; setScreen('result'); }
@@ -39,6 +40,7 @@ export default function App() {
         clock.current = createRoundClock(); setRemaining(QUESTION_SECONDS); setQuestion(next);
       }
     };
+    if (skipped) { advance(); return; }
     const response = updated.at(-1)!;
     setRemaining(clock.current.remaining());
     setFeedback({ selected: timing.selected, timedOut: timing.timedOut, right: correct(response), streak: streakStats(updated).current });
@@ -94,15 +96,17 @@ export default function App() {
         <h1 className="question" ref={heading} tabIndex={-1}><MathText text={question.prompt} /></h1>
         <p className="question-help" id="choice-help">보기를 누르면 답이 확정돼요.</p>
         <div className="choices" role="group" aria-label="답 선택" aria-describedby="choice-help">{question.choices.map((choice, i) => <button key={`${question.id}-${i}`} className={`choice ${feedback?.selected === i ? feedback.right ? 'answered-right' : 'answered-wrong' : ''}`} disabled={feedback !== null} onClick={() => submit(i)}><span className="choice-number">{i + 1}</span><MathText text={choice} />{feedback?.selected === i && <span className="answer-mark">{feedback.right ? feedback.streak >= 3 ? `✓ ${feedback.streak}연속!` : '✓ 정답!' : '아깝다!'}</span>}</button>)}</div>
+        <button className="skip" disabled={feedback !== null} onClick={() => submit(null, true)}>건너뛰기</button>
         <p className="fine center">시간이 끝나면 자동으로 넘어가요. 해설은 끝나고 확인!</p>
       </section>}
       {screen === 'result' && <section className="results">
         <div className="result-hero"><span className="eyebrow">YOUR MATH MOMENT</span><div className="result-icon">✦</div><h1 ref={heading} tabIndex={-1}>당신의 수학 나이는</h1><p className="grade">{summary.label}</p><p className="lead">{summary.grade === 9 ? '중3까지 도달! 수학 감각 최고예요 🏆' : summary.grade >= 7 ? '중학교 수학도 거뜬하네요 😎' : summary.grade >= 5 ? '수학 감각, 아직 살아있네요 😎' : summary.grade >= 3 ? '오랜만인데 꽤 잘 풀었는데요! ✨' : '한 번 더! 이번엔 올라갈 수 있어요 🚀'}</p><span className="score">10문제 중 {summary.score}개 정답 · {formatTime(summary.elapsedMs)}</span><p className="fine">재미로 보는 수학 나이예요. 실제 학년이나 수학 능력을 의미하지 않아요.</p></div>
         <p className="best-streak">✨ 최고 연속 정답 <strong>{summary.bestStreak}회</strong></p>
+        {summary.skips > 0 && <p className="fine center">건너뛴 문제 {summary.skips}개 · 정답과 해설을 확인해보세요.</p>}
         {summary.timeouts > 0 && <p className="fine center">시간 초과 {summary.timeouts}문제 · 이번엔 조금 더 빠르게!</p>}
         <div className="result-actions"><button className="primary" onClick={start}>{summary.grade === 9 ? '중3 한 번 더 도전! ↻' : '한 학년 더 올라갈까? ↻'}</button><button className="secondary" onClick={share}>친구에게 도전장 보내기 ↗</button></div><p className="notice" role="status">{notice}</p>
         {notice.startsWith('공유하지') && <textarea className="share-fallback" readOnly value={shareText} aria-label="복사할 결과 문구" onFocus={e => e.target.select()} />}
-        <details className="review"><summary className="review-heading">정답 확인 <span>{TOTAL}문제</span></summary><div>{responses.map((response, i) => <details key={response.question.id}><summary><span className={correct(response) ? 'right' : 'wrong'}>{correct(response) ? '✓' : '−'}</span><span>{i + 1}. <MathText text={response.question.prompt} /></span><span className="expand">＋</span></summary><div className="explanation"><p>내 답: {response.selected === null ? (response.timedOut ? '시간 초과' : '넘어가기') : <MathText text={response.question.choices[response.selected]} />}</p><p><strong>정답: <MathText text={response.question.choices[response.question.answer]} /></strong></p><p><MathText text={response.question.explanation} /></p></div></details>)}</div></details>
+        <details className="review"><summary className="review-heading">정답 확인 <span>{TOTAL}문제</span></summary><div>{responses.map((response, i) => <details key={response.question.id}><summary><span className={correct(response) ? 'right' : 'wrong'}>{correct(response) ? '✓' : '−'}</span><span>{i + 1}. <MathText text={response.question.prompt} /></span><span className="expand">＋</span></summary><div className="explanation"><p>내 답: {response.selected === null ? (response.timedOut ? '시간 초과' : '건너뛰기') : <MathText text={response.question.choices[response.selected]} />}</p><p><strong>정답: <MathText text={response.question.choices[response.question.answer]} /></strong></p><p><MathText text={response.question.explanation} /></p></div></details>)}</div></details>
       </section>}
     </main><footer><span>몇 학년? · 도전하는 재미</span><span>수학 편 / 초등~중학교</span></footer>
   </div>;

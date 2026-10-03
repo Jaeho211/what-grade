@@ -10,7 +10,7 @@ export type Question = {
   id: string; schoolLevel: 'elementary' | 'middle'; grade: number; level: number; concept: string; prompt: string;
   choices: string[]; answer: number; explanation: string;
 };
-export type Response = { question: Question; selected: number | null; elapsedMs?: number; timedOut?: boolean };
+export type Response = { question: Question; selected: number | null; elapsedMs?: number; timedOut?: boolean; skipped?: boolean };
 const elementary: Question[] = [...grade1, ...grade2, ...grade3, ...grade4, ...grade5, ...grade6]
   .map(q => ({ ...q, schoolLevel: 'elementary', level: q.grade }));
 const middleConcepts = [
@@ -88,5 +88,5 @@ export function result(responses: Response[]) {
   const high = Math.min(MAX_LEVEL, grade + 1);
   const strengths = [...new Set(responses.filter(correct).map(r => r.question.concept))];
   const practice = [...new Set(responses.filter(r => !correct(r)).map(r => r.question.concept))];
-  return { bestStreak: streakStats(responses).best, grade, label: levelLabel(grade), low, high, strengths, practice, elapsedMs: responses.reduce((sum, r) => sum + (r.elapsedMs ?? 0), 0), timeouts: responses.filter(r => r.timedOut).length, score: responses.filter(correct).length };
+  return { bestStreak: streakStats(responses).best, grade, label: levelLabel(grade), low, high, strengths, practice, elapsedMs: responses.reduce((sum, r) => sum + (r.elapsedMs ?? 0), 0), skips: responses.filter(r => r.skipped).length, timeouts: responses.filter(r => r.timedOut).length, score: responses.filter(correct).length };
 }
