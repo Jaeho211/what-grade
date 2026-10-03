@@ -82,20 +82,18 @@ export default function App() {
         <section className="illustration" aria-label="수학 노트 그림"><div className="orbit one">÷</div><div className="orbit two">＋</div><div className="orbit three">×</div><div className="notebook"><div className="note-top">TODAY’S LITTLE CHALLENGE <span>✦</span></div><div className="note-question">나의 수학 감각은?</div><div className="equation">3 × 4 = <span>?</span></div><div className="note-lines"><i /><i /><i /></div><div className="note-bottom"><span>20초 안에 풀어보세요</span><span>↗</span></div></div><div className="sticker">딱 10문제!</div></section>
         <section className="how"><div><b>01</b><span>빠르게 풀고</span><p>내 답에 맞춰 달라지는 문제</p></div><div><b>02</b><span>수학 나이 확인</span><p>나는 과연 몇 학년일까?</p></div><div><b>03</b><span>친구에게 도전장</span><p>친구는 몇 학년으로 나올까?</p></div></section>
       </div>}
+      <span className="feedback-announcement" role="status" aria-live="polite" aria-atomic="true">{feedback ? feedback.timedOut ? '시간 끝! 다음으로 넘어가요.' : feedback.right ? feedback.streak >= 3 ? `정답! ${feedback.streak}연속 정답!` : '정답!' : '아깝다! 다음 문제에 도전해요.' : ''}</span>
       {screen === 'quiz' && question && <section className="quiz panel">
         <div className="quiz-top"><span className="eyebrow">나의 수학 나이 도전 중</span><span className="counter">{responses.length + 1} <span>/ {TOTAL}</span></span></div>
         <div className="progress" role="progressbar" aria-label="답변 완료" aria-valuenow={responses.length} aria-valuemin={0} aria-valuemax={TOTAL}><div style={{ width: `${responses.length / TOTAL * 100}%` }} /></div>
         <div className={`timer ${remaining <= 5 ? 'urgent' : ''}`}>
-          <div className="timer-heading"><span>남은 시간</span><strong role="timer" aria-label={`남은 시간 ${remaining}초`}>{remaining}초</strong></div>
+          <div className="timer-heading"><span>남은 시간</span><strong role="timer" aria-label={feedback?.timedOut ? '시간 끝!' : `남은 시간 ${remaining}초`}>{feedback?.timedOut ? '시간 끝!' : `${remaining}초`}</strong></div>
           <div className="timer-track"><div style={{ width: `${remaining / QUESTION_SECONDS * 100}%` }} /></div>
-        </div>
-        <div className={`answer-feedback ${feedback ? feedback.timedOut ? 'feedback-timeout' : feedback.right ? 'feedback-right' : 'feedback-wrong' : ''}`} role="status" aria-live="polite" aria-atomic="true">
-          {feedback && (feedback.timedOut ? <span>앗, 시간 끝! 다음으로 넘어가요.</span> : feedback.right ? <><span>✓ 정답!</span>{feedback.streak >= 3 && <span className="streak-badge">{feedback.streak}연속 정답</span>}</> : <span>아깝다! 다음 문제에 도전해요.</span>)}
         </div>
         <span className="question-label">QUESTION {String(responses.length + 1).padStart(2, '0')}</span>
         <h1 className="question" ref={heading} tabIndex={-1}><MathText text={question.prompt} /></h1>
         <p className="question-help" id="choice-help">보기를 누르면 답이 확정돼요.</p>
-        <div className="choices" role="group" aria-label="답 선택" aria-describedby="choice-help">{question.choices.map((choice, i) => <button key={`${question.id}-${i}`} className={`choice ${feedback?.selected === i ? feedback.right ? 'answered-right' : 'answered-wrong' : ''}`} disabled={feedback !== null} onClick={() => submit(i)}><span className="choice-number">{i + 1}</span><MathText text={choice} />{feedback?.selected === i && <span className="answer-mark" aria-hidden="true">{feedback.right ? '✓' : '−'}</span>}</button>)}</div>
+        <div className="choices" role="group" aria-label="답 선택" aria-describedby="choice-help">{question.choices.map((choice, i) => <button key={`${question.id}-${i}`} className={`choice ${feedback?.selected === i ? feedback.right ? 'answered-right' : 'answered-wrong' : ''}`} disabled={feedback !== null} onClick={() => submit(i)}><span className="choice-number">{i + 1}</span><MathText text={choice} />{feedback?.selected === i && <span className="answer-mark">{feedback.right ? feedback.streak >= 3 ? `✓ ${feedback.streak}연속!` : '✓ 정답!' : '아깝다!'}</span>}</button>)}</div>
         <p className="fine center">시간이 끝나면 자동으로 넘어가요. 해설은 끝나고 확인!</p>
       </section>}
       {screen === 'result' && <section className="results">
