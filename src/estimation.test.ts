@@ -71,6 +71,25 @@ describe('new problem generators', () => {
           case '인수분해': expected = n[0] / 2; break;
           case '삼각비': expected = n[0] / n[1]; break;
           case '분산': expected = ((n[1] - n[0]) / 2) ** 2; break;
+          case '수 비교': expected = Math.max(n[0], n[1]); break;
+          case '두 자리 수의 뺄셈': expected = n[0] - n[1]; break;
+          case '나눗셈의 나머지': expected = n[0] % n[1]; break;
+          case '직사각형의 둘레': expected = 2 * (n[0] + n[1]); break;
+          case '최대공약수': {
+            let a = n[0], b = n[1];
+            while (b) [a,b] = [b,a%b];
+            expected = a; break;
+          }
+          case '비례식': expected = n[1] * n[2] / n[0]; break;
+          case '정수의 곱셈': expected = n[0] * n[1]; break;
+          case '다각형의 내각의 합': expected = (n[0] - 2) * 180; break;
+          case '일차부등식': expected = Math.ceil((n[2] - n[1]) / n[0]) - 1; break;
+          case '닮음비': expected = n[1] * n[2]; break;
+          case '근호의 계산': expected = (Math.sqrt(n[0]) + Math.sqrt(n[1])) / Math.sqrt(n[2]); break;
+          case '이차방정식의 두 근': expected = (n[0] + Math.sqrt(n[0] ** 2 - 4 * n[1])) / 2; break;
+          case '이차함수의 꼭짓점': expected = n[1] - n[0] ** 2 / 4; break;
+          case '삼각비로 길이 구하기': expected = n[0] / n[1] * n[2]; break;
+          case '표준편차': expected = Math.abs(n[1] - n[0]) / 2; break;
           default: throw Error(q.concept);
         }
         const values = q.choices.map(s => { const [a,b=1] = s.split('/').map(Number); return a/b; });
@@ -93,5 +112,28 @@ describe('game result label', () => {
       }
       expect(result(responses).label).toMatch(/^(초등 [1-6]학년|중학교 [1-3]학년)$/);
     }
+  });
+});
+
+
+describe('middle-three challenge gate', () => {
+  it('reserves three distinct advanced domains after seven correct opening answers', () => {
+    const responses: Response[] = [];
+    for (let i = 0; i < 10; i++) {
+      const q = nextQuestion(responses, () => 0)!;
+      responses.push({ question: q, selected: q.answer, elapsedMs: 12000 });
+    }
+    const final = responses.slice(7);
+    expect(final.every(r => r.question.level === 9 && r.question.challenge)).toBe(true);
+    expect(new Set(final.map(r => r.question.domain)).size).toBe(3);
+    expect(result(responses).grade).toBe(9);
+    for (let i = 7; i < 10; i++) {
+      const failed = responses.map((r,j) => j === i ? { ...r, selected: null, timedOut: true } : r);
+      expect(result(failed).grade).toBeLessThan(9);
+    }
+  });
+  it('does not use prerequisite or simple middle-three answers to satisfy the advanced gate', () => {
+    const evidence = [response('피타고라스 정리', 8), response('일차함수의 기울기', 8), response('확률', 8), response('제곱근', 9), response('이차방정식', 9), response('삼각비', 9)];
+    expect(result(evidence).grade).toBeLessThan(9);
   });
 });

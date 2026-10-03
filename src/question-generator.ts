@@ -204,6 +204,67 @@ export function generateQuestion(template: Question, random = Math.random): Ques
       const a = int(5, 20), d = int(1, 6), variance = d * d;
       return numeric(`두 자료 ${a - d}, ${a + d}의 분산은?`, variance, `평균은 ${a}, 편차는 −${d}, ${d}입니다. 편차의 제곱의 평균은 ${variance}입니다.`);
     }
+    case '수 비교': {
+      const a = int(10, 80), b = a + int(1, 9);
+      return numeric(`${a}와 ${b} 중 더 큰 수는?`, b, `${b}가 ${a}보다 크므로 답은 ${b}입니다.`);
+    }
+    case '두 자리 수의 뺄셈': {
+      const a = int(40, 90), b = int(12, 39);
+      return numeric(`${a} − ${b} = ?`, a - b, `자리 값을 맞추어 빼면 ${a - b}입니다.`);
+    }
+    case '나눗셈의 나머지': {
+      const d = int(3, 9), q = int(2, 9), r = int(1, d - 1);
+      return { ...numeric(`${d * q + r} ÷ ${d}의 나머지는?`, r, `${d * q + r} = ${d} × ${q} + ${r}이므로 나머지는 ${r}입니다.`), choices: [r, 0, d, d + 1].map(String) };
+    }
+    case '직사각형의 둘레': {
+      const a = int(3, 15), b = int(2, 10);
+      return numeric(`가로 ${a}cm, 세로 ${b}cm인 직사각형의 둘레는 몇 cm인가요?`, 2 * (a + b), `네 변을 더하면 2 × (${a} + ${b}) = ${2 * (a + b)}cm입니다.`, 2);
+    }
+    case '최대공약수': {
+      const g = int(2, 12), a = g * 2, b = g * 3;
+      return numeric(`${a}과 ${b}의 최대공약수는?`, g, `두 수를 공통으로 나누는 가장 큰 수는 ${g}입니다.`);
+    }
+    case '비례식': {
+      const a = int(2, 9), b = int(2, 9), scale = int(2, 5);
+      return numeric(`${a} : ${b} = ${a * scale} : □에서 □에 들어갈 수는?`, b * scale, `앞 항이 ${scale}배가 되었으므로 뒤 항도 ${scale}배인 ${b * scale}입니다.`);
+    }
+    case '정수의 곱셈': {
+      const a = int(2, 12), b = int(2, 9);
+      return numeric(`(−${a}) × (−${b}) = ?`, a * b, `음수끼리 곱하면 양수이므로 ${a * b}입니다.`);
+    }
+    case '다각형의 내각의 합': {
+      const n = int(5, 12);
+      return numeric(`${n}각형의 내각의 합은 몇 도인가요?`, (n - 2) * 180, `(${n} − 2) × 180 = ${(n - 2) * 180}°입니다.`, 180);
+    }
+    case '일차부등식': {
+      const a = int(2, 6), k = int(3, 10), b = int(1, 9);
+      return numeric(`${a}x + ${b} < ${a * k + b}를 만족하는 가장 큰 정수 x는?`, k - 1, `x < ${k}이므로 가장 큰 정수는 ${k - 1}입니다.`);
+    }
+    case '닮음비': {
+      const a = int(2, 5), scale = int(2, 4), length = a * int(2, 6);
+      return numeric(`두 삼각형의 닮음비가 1 : ${scale}입니다. 작은 삼각형의 한 변이 ${length}cm이면 대응하는 큰 변은 몇 cm인가요?`, length * scale, `대응하는 길이는 ${scale}배이므로 ${length * scale}cm입니다.`);
+    }
+    case '근호의 계산': {
+      const n = int(2, 8), m = int(2, 7), base = [2, 3, 5, 7][int(0, 3)];
+      return numeric(`√${n * n * base} + √${m * m * base} = n√${base}일 때 n은?`, n + m, `각 근호를 정리하면 ${n}√${base} + ${m}√${base}이므로 계수는 ${n + m}입니다.`);
+    }
+    case '이차방정식의 두 근': {
+      const a = int(2, 8), b = a + int(1, 7);
+      return numeric(`x² − ${a + b}x + ${a * b} = 0의 두 근 중 큰 것은?`, b, `(x − ${a})(x − ${b}) = 0이므로 두 근 중 큰 것은 ${b}입니다.`);
+    }
+    case '이차함수의 꼭짓점': {
+      const h = int(2, 6), k = int(2, 9);
+      return numeric(`y = x² − ${2 * h}x + ${h * h + k}의 최솟값은?`, k, `y = (x − ${h})² + ${k}이므로 최솟값은 ${k}입니다.`);
+    }
+    case '삼각비로 길이 구하기': {
+      const triples = [[3, 4, 5], [5, 12, 13], [8, 15, 17]];
+      const [a, , c] = triples[int(0, 2)], scale = int(2, 6);
+      return numeric(`직각삼각형에서 sin A = ${a}/${c}, 빗변의 길이는 ${c * scale}cm입니다. 각 A의 맞은편 변은 몇 cm인가요?`, a * scale, `맞은편 변 = 빗변 × sin A = ${a * scale}cm입니다.`);
+    }
+    case '표준편차': {
+      const a = int(10, 30), d = int(2, 8);
+      return numeric(`두 자료 ${a - d}, ${a + d}의 표준편차는?`, d, `평균은 ${a}, 분산은 ${d * d}이므로 표준편차는 ${d}입니다.`);
+    }
     default: throw new Error(`지원하지 않는 문제 유형: ${template.concept}`);
   }
 }

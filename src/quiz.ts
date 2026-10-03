@@ -7,7 +7,7 @@ import grade5 from '../data/questions/math/grade-5.json';
 import grade6 from '../data/questions/math/grade-6.json';
 
 export type Question = {
-  id: string; schoolLevel: 'elementary' | 'middle'; grade: number; level: number; concept: string; domain?: string; expectedMs?: number; prompt: string;
+  id: string; schoolLevel: 'elementary' | 'middle'; grade: number; level: number; concept: string; domain?: string; expectedMs?: number; challenge?: boolean; prompt: string;
   choices: string[]; answer: number; explanation: string;
 };
 export type Response = { question: Question; selected: number | null; elapsedMs?: number; timedOut?: boolean; skipped?: boolean };
@@ -24,14 +24,26 @@ const addedConcepts: [number, string, string, number][] = [
   [7, '정비례', '함수', 10000], [7, '삼각형의 내각', '도형', 10000], [7, '중앙값', '자료와 가능성', 12000],
   [8, '지수법칙', '문자와 식', 10000], [8, '연립일차방정식', '문자와 식', 15000],
   [8, '피타고라스 정리', '도형', 15000], [8, '일차함수의 기울기', '함수', 12000], [8, '확률', '자료와 가능성', 12000],
+  [1, '수 비교', '수와 연산', 8000], [2, '두 자리 수의 뺄셈', '수와 연산', 10000],
+  [3, '나눗셈의 나머지', '수와 연산', 12000], [4, '직사각형의 둘레', '도형', 12000],
+  [5, '최대공약수', '수와 연산', 13000], [6, '비례식', '규칙과 관계', 13000],
+  [7, '정수의 곱셈', '수와 연산', 10000], [7, '다각형의 내각의 합', '도형', 13000],
+  [8, '일차부등식', '문자와 식', 14000], [8, '닮음비', '도형', 14000],
   [9, '제곱근', '수와 연산', 9000], [9, '이차방정식', '문자와 식', 12000],
   [9, '인수분해', '문자와 식', 15000], [9, '이차함수', '함수', 12000],
   [9, '삼각비', '도형', 15000], [9, '분산', '자료와 가능성', 15000],
 ];
+const challengeConcepts: [number, string, string, number][] = [
+  [9, '근호의 계산', '수와 연산', 15000], [9, '이차방정식의 두 근', '문자와 식', 17000],
+  [9, '이차함수의 꼭짓점', '함수', 17000], [9, '삼각비로 길이 구하기', '도형', 17000],
+  [9, '표준편차', '자료와 가능성', 17000],
+];
+addedConcepts.push(...challengeConcepts);
 const extra: Question[] = addedConcepts.flatMap(([level, concept, domain, expectedMs]) =>
   Array.from({ length: 4 }, (_, slot) => ({
     id: `math-extra-${level}-${concept}-${slot + 1}`, schoolLevel: level <= 6 ? 'elementary' as const : 'middle' as const,
     grade: level <= 6 ? level : level - 6, level, concept, domain, expectedMs,
+    challenge: challengeConcepts.some(([, name]) => name === concept),
     prompt: '', choices: [], answer: 0, explanation: '',
   })));
 // Concrete samples keep the exported bank usable for previews and validation.
@@ -52,13 +64,15 @@ export function targetGrade(responses: Response[]): number {
     if (pair.every(correct)) grade = Math.min(MAX_LEVEL, grade + 1);
     else if (pair.every(r => !correct(r))) grade = Math.max(1, grade - 1);
   }
+  // Perfect opening earns three final middle-three challenges without extending the quiz.
+  if (responses.length >= 7 && responses.slice(0, 7).every(correct)) return MAX_LEVEL;
   return grade;
 }
 
 export function nextQuestion(responses: Response[], random = Math.random): Question | undefined {
   if (responses.length >= TOTAL) return undefined;
   const used = new Set(responses.map(r => r.question.id));
-  const remaining = questions.filter(q => !used.has(q.id));
+  const remaining = questions.filter(q => !used.has(q.id) && (q.level !== 9 || q.challenge));
   const target = targetGrade(responses);
   const distance = Math.min(...remaining.map(q => Math.abs(q.level - target)));
   const nearby = remaining.filter(q => Math.abs(q.level - target) === distance);
@@ -103,6 +117,10 @@ export function result(responses: Response[]) {
   const target = targetGrade(responses);
   // A single specialty cannot establish a grade. Evidence includes its adjacent prerequisite level.
   const qualified = (level: number) => {
+    if (level === MAX_LEVEL) {
+      const advanced = responses.filter(r => correct(r) && r.question.level === MAX_LEVEL && r.question.challenge);
+      return advanced.length >= 3 && new Set(advanced.map(r => r.question.domain)).size >= 3;
+    }
     const evidence = responses.filter(r => correct(r) && r.question.level >= Math.max(1, level - 1));
     return evidence.some(r => r.question.level >= level) && new Set(evidence.map(r => r.question.domain)).size >= 3;
   };
