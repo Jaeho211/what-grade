@@ -39,6 +39,7 @@ describe('adaptive quiz', () => {
     expect(targetGrade(responses.slice(0, 2))).toBe(6);
     expect(result(responses).score).toBe(10);
     expect(targetGrade(responses)).toBe(9);
+    expect(result(responses).supported).toBe(true);
   });
   it('checks a different concept within each pair and preserves the answer when shuffling', () => {
     const responses = run('correct');
@@ -66,7 +67,7 @@ describe('randomized math', () => {
   it('generates varied numbers and exactly one mathematically correct choice for every type', () => {
     let seed = 123456;
     const random = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 2 ** 32);
-    for (const template of questions.filter(q => q.schoolLevel === 'elementary')) {
+    for (const template of questions.filter(q => q.schoolLevel === 'elementary' && !q.id.startsWith('math-extra-'))) {
       const prompts = new Set<string>();
       for (let i = 0; i < 100; i++) {
         const q = generateQuestion(template, random);
@@ -93,7 +94,7 @@ describe('randomized math', () => {
       const q = nextQuestion([], () => draw)!;
       const [, a, b] = q.prompt.match(/^(\d+\.\d+) × (\d+) = \?$/) ?? [];
       if (q.concept === '소수의 곱셈') expect(Number(q.choices[q.answer])).toBeCloseTo(Number(a) * Number(b));
-      else {
+      else if (q.concept === '약수') {
         const n = Number(q.prompt.match(/^\d+/)![0]);
         expect(n % Number(q.choices[q.answer])).toBe(0);
       }

@@ -125,6 +125,85 @@ export function generateQuestion(template: Question, random = Math.random): Ques
       return numeric(`y = ${a}x²에서 x = ${x}일 때 y는?`, y,
         `y = ${a} × (${x})² = ${y}입니다.`);
     }
+    case '모양 찾기': {
+      const names = ['삼각형', '사각형', '오각형', '육각형'];
+      const index = int(0, 1), sides = index + 3;
+      const property = int(0, 1) === 0 ? '변' : '꼭짓점';
+      return { ...template, prompt: `${property}이 ${sides}개인 평면 모양은?`, choices: names, answer: index,
+        explanation: `${names[index]}은 ${property}이 ${sides}개입니다.` };
+    }
+    case '수의 순서': {
+      const n = int(2, 80);
+      return numeric(`${n} 바로 다음의 수는?`, n + 1, `${n}보다 1 큰 수는 ${n + 1}입니다.`);
+    }
+    case '길이 단위': {
+      const m = int(1, 8), cm = int(1, 90);
+      return numeric(`${m}m ${cm}cm는 몇 cm인가요?`, m * 100 + cm, `1m는 100cm이므로 ${m * 100 + cm}cm입니다.`, 10);
+    }
+    case '수의 규칙': {
+      const a = int(1, 30), d = int(2, template.level === 2 ? 5 : 12);
+      return numeric(`${a}, ${a + d}, ${a + 2 * d}, ? — 같은 규칙으로 이어지는 수는?`, a + 3 * d, `${d}씩 커지므로 다음 수는 ${a + 3 * d}입니다.`, d);
+    }
+    case '시간 계산': {
+      const hour = int(1, 10), minute = int(30, 50), duration = int(20, 40);
+      const total = minute + duration;
+      return { ...numeric(`${hour}시 ${minute}분에서 ${duration}분 뒤는?`, hour + Math.floor(total / 60), `분을 더하고 60분을 1시간으로 바꾸면 ${hour + Math.floor(total / 60)}시 ${total % 60}분입니다.`), choices: [0, -1, 1, 2].map(offset => `${hour + Math.floor(total / 60) + offset}시 ${total % 60}분`) };
+    }
+    case '정사각형의 변': {
+      const side = int(2, 20);
+      return numeric(`정사각형의 한 변이 ${side}cm입니다. 나머지 한 변은 몇 cm인가요?`, side, `정사각형의 네 변은 모두 같으므로 ${side}cm입니다.`);
+    }
+    case '각도 계산': {
+      const a = int(2, 15) * 10;
+      return numeric(`일직선 위의 두 이웃한 각 중 하나가 ${a}°입니다. 다른 각은 몇 도인가요?`, 180 - a, `두 각의 합이 180°이므로 ${180 - a}°입니다.`, 10);
+    }
+    case '직사각형의 넓이': {
+      const a = int(3, 12), b = int(2, 9);
+      return numeric(`가로 ${a}cm, 세로 ${b}cm인 직사각형의 넓이는 몇 cm²인가요?`, a * b, `가로 × 세로 = ${a * b}cm²입니다.`);
+    }
+    case '평균': {
+      const a = int(5, 30), d = int(1, 4);
+      return numeric(`${a - d}, ${a}, ${a + d}의 평균은?`, a, `세 수의 합 ${3 * a}을 3으로 나누면 ${a}입니다.`);
+    }
+    case '직육면체의 부피': {
+      const a = int(2, 7), b = int(2, 6), c = int(2, 5);
+      return numeric(`가로 ${a}cm, 세로 ${b}cm, 높이 ${c}cm인 직육면체의 부피는 몇 cm³인가요?`, a * b * c, `가로 × 세로 × 높이 = ${a * b * c}cm³입니다.`);
+    }
+    case '백분율': {
+      const percent = int(1, 9) * 10, total = int(2, 10) * 10;
+      return numeric(`${total}의 ${percent}%는?`, total * percent / 100, `${total} × ${percent}/100 = ${total * percent / 100}입니다.`);
+    }
+    case '삼각형의 내각': {
+      const a = int(3, 7) * 10, b = int(3, 7) * 10;
+      return numeric(`삼각형의 두 내각이 ${a}°, ${b}°입니다. 나머지 내각은 몇 도인가요?`, 180 - a - b, `내각의 합은 180°이므로 ${180 - a - b}°입니다.`, 10);
+    }
+    case '중앙값': {
+      const a = int(5, 30), d = int(1, 5);
+      return numeric(`${a + d}, ${a - d}, ${a}의 중앙값은?`, a, `크기순으로 정렬했을 때 가운데 값은 ${a}입니다.`);
+    }
+    case '일차함수의 기울기': {
+      const a = int(2, 9), b = int(1, 15);
+      return numeric(`일차함수 y = ${a}x + ${b}의 기울기는?`, a, `x의 계수가 기울기이므로 ${a}입니다.`);
+    }
+    case '확률': {
+      const red = int(1, 7), blue = int(1, 7), total = red + blue;
+      const answer = reducedFraction(red, total);
+      return { ...template, prompt: `빨간 공 ${red}개와 파란 공 ${blue}개에서 공 하나를 무작위로 뽑을 때 빨간 공일 확률은?`, choices: [answer, '0', '1', reducedFraction(red, total + 1)], answer: 0, explanation: `전체 ${total}개 중 빨간 공이 ${red}개이므로 확률은 ${answer}입니다.` };
+    }
+    case '인수분해': {
+      const a = int(2, 9);
+      return numeric(`x² + ${2 * a}x + ${a * a} = (x + a)²일 때 a는?`, a, `완전제곱식에서 x의 계수는 2a이므로 a = ${a}입니다.`);
+    }
+    case '삼각비': {
+      const triples = [[3, 4, 5], [5, 12, 13], [8, 15, 17]];
+      const [a, b, c] = triples[int(0, 2)], scale = int(1, 5);
+      const answer = reducedFraction(a, c);
+      return { ...template, prompt: `직각삼각형에서 각 A의 맞은편 변이 ${a * scale}, 빗변이 ${c * scale}입니다. sin A는?`, choices: [answer, reducedFraction(b, c), reducedFraction(a, b), reducedFraction(c, a)], answer: 0, explanation: `sin A = 맞은편 변 ÷ 빗변 = ${answer}입니다.` };
+    }
+    case '분산': {
+      const a = int(5, 20), d = int(1, 6), variance = d * d;
+      return numeric(`두 자료 ${a - d}, ${a + d}의 분산은?`, variance, `평균은 ${a}, 편차는 −${d}, ${d}입니다. 편차의 제곱의 평균은 ${variance}입니다.`);
+    }
     default: throw new Error(`지원하지 않는 문제 유형: ${template.concept}`);
   }
 }
