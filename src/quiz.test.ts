@@ -97,3 +97,45 @@ describe('randomized math', () => {
     }
   });
 });
+
+describe('fraction answer formatting', () => {
+  const division = questions.find(q => q.concept === '분수의 나눗셈')!;
+  const addition = questions.find(q => q.concept === '분수의 덧셈')!;
+  function withDraws(template: typeof division, draws: number[]) {
+    let i = 0;
+    return generateQuestion(template, () => draws[i++]);
+  }
+  it('shows the reduced division answer and its reduction in the explanation', () => {
+    const q = withDraws(division, [0, 0.75, 0]);
+    expect(q.prompt).toBe('2/3 ÷ 2 = ?');
+    expect(q.choices[q.answer]).toBe('1/3');
+    expect(q.explanation).toContain('2/6');
+    expect(q.explanation).toContain('약분하면 1/3');
+  });
+  it('formats whole-number choices as integers', () => {
+    const q = withDraws(division, [0, 0.75, 0.3]);
+    expect(q.choices).toContain('2');
+    expect(q.choices).not.toContain('2/1');
+  });
+  it('keeps the common denominator for grade-four addition', () => {
+    const q = withDraws(addition, [0.07, 0.3, 0.4]);
+    expect(q.prompt).toBe('2/6 + 2/6 = ?');
+    expect(q.choices[q.answer]).toBe('4/6');
+  });
+  it('has four distinct reduced choices and one correct answer for all division operands', () => {
+    const gcd = (x: number, y: number): number => y === 0 ? x : gcd(y, x % y);
+    for (let d = 3; d <= 15; d++) for (let a = 1; a < d; a++) for (let b = 2; b <= 5; b++) {
+      const q = withDraws(division, [(d - 3 + 0.1) / 13, (a - 1 + 0.1) / (d - 1), (b - 2 + 0.1) / 4]);
+      expect(q.prompt).toBe(`${a}/${d} ÷ ${b} = ?`);
+      expect(new Set(q.choices).size).toBe(4);
+      const values = q.choices.map(text => {
+        const [n, denominator = 1] = text.split('/').map(Number);
+        expect(gcd(n, denominator)).toBe(1);
+        if (denominator === 1) expect(text).not.toContain('/');
+        return n / denominator;
+      });
+      expect(values.filter(n => Math.abs(n - a / (d * b)) < 1e-10)).toHaveLength(1);
+      expect(values[q.answer]).toBeCloseTo(a / (d * b), 10);
+    }
+  });
+});

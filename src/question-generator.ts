@@ -1,5 +1,12 @@
 import type { Question } from './quiz';
 
+function reducedFraction(numerator: number, denominator: number): string {
+  let a = numerator, b = denominator;
+  while (b !== 0) [a, b] = [b, a % b];
+  const n = numerator / a, d = denominator / a;
+  return d === 1 ? String(n) : `${n}/${d}`;
+}
+
 // Work in integers (tenths for decimals) so answers never contain rounding noise.
 export function generateQuestion(template: Question, random = Math.random): Question {
   const int = (min: number, max: number) => min + Math.min(max - min, Math.floor(random() * (max - min + 1)));
@@ -62,8 +69,19 @@ export function generateQuestion(template: Question, random = Math.random): Ques
     }
     case '분수의 나눗셈': {
       const d = int(3, 15), a = int(1, d - 1), b = int(2, 5);
-      return { ...template, prompt: `${a}/${d} ÷ ${b} = ?`, choices: [`${a}/${d * b}`, `${a * b}/${d}`, `${a}/${d}`, `${a}/${d * (b + 1)}`], answer: 0,
-        explanation: `${b}로 나누는 것은 1/${b}을 곱하는 것과 같으므로 ${a}/${d * b}입니다. 약분 전 표현입니다.` };
+      const rawAnswer = `${a}/${d * b}`;
+      const answer = reducedFraction(a, d * b);
+      // Canonical representations collapse equivalent fractions before selecting choices.
+      const choices = [...new Set([
+        answer, reducedFraction(a * b, d), reducedFraction(a, d), reducedFraction(a, d * (b + 1)),
+      ])];
+      for (let extra = b + 2; choices.length < 4; extra++) {
+        const candidate = reducedFraction(a, d * extra);
+        if (!choices.includes(candidate)) choices.push(candidate);
+      }
+      const reduction = answer === rawAnswer ? '' : ` 분자와 분모를 약분하면 ${answer}입니다.`;
+      return { ...template, prompt: `${a}/${d} ÷ ${b} = ?`, choices, answer: 0,
+        explanation: `${b}로 나누는 것은 1/${b}을 곱하는 것과 같습니다. ${a}/${d} × 1/${b} = ${rawAnswer}입니다.${reduction}` };
     }
     default: throw new Error(`지원하지 않는 문제 유형: ${template.concept}`);
   }
