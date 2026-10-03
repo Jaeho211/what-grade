@@ -7,6 +7,17 @@ function expression(text: string): ReactNode[] {
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
     let node: ReactNode;
+    // Explicit inner padding prevents italic glyphs from touching mobile math fences.
+    if (token === '(' || token === '{') {
+      nodes.push(createElement('mo', { key: `${i}-open` }, token));
+      nodes.push(createElement('mspace', { key: `${i}-inner`, width: '0.12em' }));
+      continue;
+    }
+    if (token === ')' || token === '}') {
+      nodes.push(createElement('mspace', { key: `${i}-inner`, width: '0.08em' }));
+      nodes.push(createElement('mo', { key: `${i}-close` }, token));
+      continue;
+    }
     if (/^(sin|cos|tan)$/.test(token)) {
       nodes.push(createElement('mi', { key: `${i}-function`, mathvariant: 'normal' }, token));
       nodes.push(createElement('mo', { key: `${i}-apply` }, '\u2061'));

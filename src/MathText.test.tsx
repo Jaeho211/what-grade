@@ -117,3 +117,12 @@ describe('consistent typography and wrapping', () => {
     expect(renderToStaticMarkup(<MathText text="1.25" />)).toContain('<mn>1.25</mn>');
   });
 });
+
+
+it('adds explicit space between parentheses and italic variables on mobile', () => {
+  const html = renderToStaticMarkup(<MathText text="3(x + 4) = 15에서 x는?" />);
+  expect(html).toContain('<mo>(</mo><mspace width="0.12em"></mspace><mi>x</mi>');
+  expect(html).toContain('<mn>4</mn><mspace width="0.08em"></mspace><mo>)</mo>');
+  expect(html).toContain('<mn>3</mn><mo>(</mo>');
+  expect(html).toContain('</math>는?</span>');
+});
