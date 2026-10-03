@@ -83,6 +83,48 @@ export function generateQuestion(template: Question, random = Math.random): Ques
       return { ...template, prompt: `${a}/${d} ÷ ${b} = ?`, choices, answer: 0,
         explanation: `${b}로 나누는 것은 1/${b}을 곱하는 것과 같습니다. ${a}/${d} × 1/${b} = ${rawAnswer}입니다.${reduction}` };
     }
+    case '정수의 덧셈': {
+      const a = -int(2, 20), b = int(2, 25);
+      return numeric(`(${a}) + ${b} = ?`, a + b, `${b}에서 ${-a}을(를) 빼면 ${a + b}입니다.`);
+    }
+    case '일차방정식': {
+      const a = int(2, 9), x = int(1, 12), b = int(1, 15), c = a * x + b;
+      return numeric(`${a}x + ${b} = ${c}에서 x는?`, x, `${a}x = ${c - b}이므로 x = ${x}입니다.`);
+    }
+    case '정비례': {
+      const a = int(2, 8), x = int(2, 12), y = a * x;
+      return numeric(`y = ${a}x에서 x = ${x}일 때 y는?`, y, `y = ${a} × ${x} = ${y}입니다.`);
+    }
+    case '지수법칙': {
+      const base = int(2, 5), a = int(2, 6), b = int(2, 6);
+      return numeric(`${base}^${a} × ${base}^${b} = ${base}^n에서 n은?`, a + b,
+        `밑이 같은 거듭제곱을 곱하면 지수를 더합니다. n = ${a} + ${b} = ${a + b}입니다.`);
+    }
+    case '연립일차방정식': {
+      const y = int(1, 8), x = y + int(1, 8);
+      return numeric(`x + y = ${x + y}, x − y = ${x - y}에서 x는?`, x,
+        `두 식을 더하면 2x = ${2 * x}이므로 x = ${x}입니다.`);
+    }
+    case '피타고라스 정리': {
+      const triples = [[3, 4, 5], [5, 12, 13], [8, 15, 17]];
+      const [a, b, c] = triples[int(0, 2)], scale = int(1, 5);
+      return numeric(`직각삼각형의 두 직각변이 ${a * scale}, ${b * scale}일 때 빗변의 길이는?`, c * scale,
+        `빗변의 제곱은 ${a * scale}² + ${b * scale}² = ${(c * scale) ** 2}이므로 길이는 ${c * scale}입니다.`);
+    }
+    case '제곱근': {
+      const n = int(2, 20);
+      return numeric(`√${n * n} = ?`, n, `√는 음이 아닌 제곱근을 뜻합니다. ${n}² = ${n * n}이므로 답은 ${n}입니다.`);
+    }
+    case '이차방정식': {
+      const n = int(2, 15);
+      return numeric(`x² = ${n * n}의 양수인 해는?`, n,
+        `해는 −${n}, ${n}이며, 양수인 해는 ${n}입니다.`);
+    }
+    case '이차함수': {
+      const a = int(1, 4), x = -int(2, 9), y = a * x * x;
+      return numeric(`y = ${a}x²에서 x = ${x}일 때 y는?`, y,
+        `y = ${a} × (${x})² = ${y}입니다.`);
+    }
     default: throw new Error(`지원하지 않는 문제 유형: ${template.concept}`);
   }
 }

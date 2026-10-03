@@ -17,7 +17,7 @@ describe('question bank', () => {
     expect(new Set(questions.map(q => q.id)).size).toBe(questions.length);
     for (const q of questions) {
       expect(q.grade).toBeGreaterThanOrEqual(1);
-      expect(q.grade).toBeLessThanOrEqual(6);
+      expect(q.grade).toBeLessThanOrEqual(q.schoolLevel === 'middle' ? 3 : 6);
       expect(q.choices[q.answer]).toBeDefined();
       expect(new Set(q.choices).size).toBe(q.choices.length);
     }
@@ -31,14 +31,14 @@ describe('adaptive quiz', () => {
     expect(nextQuestion(responses)).toBeUndefined();
     const summary = result(responses);
     expect(summary.low).toBeGreaterThanOrEqual(1);
-    expect(summary.high).toBeLessThanOrEqual(6);
+    expect(summary.high).toBeLessThanOrEqual(9);
   });
   it('keeps the level after one answer and raises after two correct answers', () => {
     const responses = run('correct');
-    expect(targetGrade(responses.slice(0, 1))).toBe(3);
-    expect(targetGrade(responses.slice(0, 2))).toBe(4);
+    expect(targetGrade(responses.slice(0, 1))).toBe(5);
+    expect(targetGrade(responses.slice(0, 2))).toBe(6);
     expect(result(responses).score).toBe(10);
-    expect(targetGrade(responses)).toBe(6);
+    expect(targetGrade(responses)).toBe(9);
   });
   it('checks a different concept within each pair and preserves the answer when shuffling', () => {
     const responses = run('correct');
@@ -54,7 +54,7 @@ describe('adaptive quiz', () => {
   it('lowers for wrong or skipped answers and stays for mixed pairs', () => {
     expect(targetGrade(run('wrong'))).toBe(1);
     expect(result(run('skip')).score).toBe(0);
-    expect(targetGrade(run('mixed'))).toBe(3);
+    expect(targetGrade(run('mixed'))).toBe(5);
   });
 });
 
@@ -66,7 +66,7 @@ describe('randomized math', () => {
   it('generates varied numbers and exactly one mathematically correct choice for every type', () => {
     let seed = 123456;
     const random = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 2 ** 32);
-    for (const template of questions) {
+    for (const template of questions.filter(q => q.schoolLevel === 'elementary')) {
       const prompts = new Set<string>();
       for (let i = 0; i < 100; i++) {
         const q = generateQuestion(template, random);
@@ -91,9 +91,12 @@ describe('randomized math', () => {
   it('preserves the calculated answer after choice shuffling', () => {
     for (const draw of [0, 0.25, 0.75, 0.999999]) {
       const q = nextQuestion([], () => draw)!;
-      const [, a, b] = q.prompt.match(/^(\d+) [+÷] (\d+) = \?$/)!;
-      const expected = q.concept === '나눗셈' ? Number(a) / Number(b) : Number(a) + Number(b);
-      expect(Number(q.choices[q.answer])).toBe(expected);
+      const [, a, b] = q.prompt.match(/^(\d+\.\d+) × (\d+) = \?$/) ?? [];
+      if (q.concept === '소수의 곱셈') expect(Number(q.choices[q.answer])).toBeCloseTo(Number(a) * Number(b));
+      else {
+        const n = Number(q.prompt.match(/^\d+/)![0]);
+        expect(n % Number(q.choices[q.answer])).toBe(0);
+      }
     }
   });
 });

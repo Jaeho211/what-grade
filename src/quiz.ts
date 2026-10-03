@@ -7,20 +7,38 @@ import grade5 from '../data/questions/math/grade-5.json';
 import grade6 from '../data/questions/math/grade-6.json';
 
 export type Question = {
-  id: string; grade: number; concept: string; prompt: string;
+  id: string; schoolLevel: 'elementary' | 'middle'; grade: number; level: number; concept: string; prompt: string;
   choices: string[]; answer: number; explanation: string;
 };
 export type Response = { question: Question; selected: number | null; elapsedMs?: number; timedOut?: boolean };
-export const questions: Question[] = [...grade1, ...grade2, ...grade3, ...grade4, ...grade5, ...grade6];
+const elementary: Question[] = [...grade1, ...grade2, ...grade3, ...grade4, ...grade5, ...grade6]
+  .map(q => ({ ...q, schoolLevel: 'elementary', level: q.grade }));
+const middleConcepts = [
+  ['정수의 덧셈', '일차방정식', '정비례'],
+  ['지수법칙', '연립일차방정식', '피타고라스 정리'],
+  ['제곱근', '이차방정식', '이차함수'],
+];
+const middle: Question[] = middleConcepts.flatMap((concepts, index) => concepts.flatMap(concept =>
+  Array.from({ length: 4 }, (_, slot) => ({
+    id: `math-middle-${index + 1}-${concept}-${slot + 1}`, schoolLevel: 'middle' as const,
+    grade: index + 1, level: index + 7, concept, prompt: '', choices: [], answer: 0, explanation: '',
+  }))));
+// Concrete samples keep the exported bank usable for previews and validation.
+export const questions: Question[] = [...elementary, ...middle.map(q => generateQuestion(q, () => 0))];
+export const START_LEVEL = 5;
+export const MAX_LEVEL = 9;
+export function levelLabel(level: number): string {
+  return level <= 6 ? `초등 ${level}학년` : `중학교 ${level - 6}학년`;
+}
 export const TOTAL = 10;
 export const correct = (response: Response) => response.selected === response.question.answer;
 
 // Two answers at one level are required before changing the target grade.
 export function targetGrade(responses: Response[]): number {
-  let grade = 3;
+  let grade = START_LEVEL;
   for (let i = 0; i + 1 < responses.length; i += 2) {
     const pair = responses.slice(i, i + 2);
-    if (pair.every(correct)) grade = Math.min(6, grade + 1);
+    if (pair.every(correct)) grade = Math.min(MAX_LEVEL, grade + 1);
     else if (pair.every(r => !correct(r))) grade = Math.max(1, grade - 1);
   }
   return grade;
@@ -31,8 +49,8 @@ export function nextQuestion(responses: Response[], random = Math.random): Quest
   const used = new Set(responses.map(r => r.question.id));
   const remaining = questions.filter(q => !used.has(q.id));
   const target = targetGrade(responses);
-  const distance = Math.min(...remaining.map(q => Math.abs(q.grade - target)));
-  const nearby = remaining.filter(q => Math.abs(q.grade - target) === distance);
+  const distance = Math.min(...remaining.map(q => Math.abs(q.level - target)));
+  const nearby = remaining.filter(q => Math.abs(q.level - target) === distance);
   const differentConcept = responses.length % 2 === 1
     ? nearby.filter(q => q.concept !== responses.at(-1)?.question.concept)
     : nearby;
@@ -58,8 +76,8 @@ export function nextQuestion(responses: Response[], random = Math.random): Quest
 export function result(responses: Response[]) {
   const grade = targetGrade(responses);
   const low = Math.max(1, grade - 1);
-  const high = Math.min(6, grade + 1);
+  const high = Math.min(MAX_LEVEL, grade + 1);
   const strengths = [...new Set(responses.filter(correct).map(r => r.question.concept))];
   const practice = [...new Set(responses.filter(r => !correct(r)).map(r => r.question.concept))];
-  return { grade, low, high, strengths, practice, elapsedMs: responses.reduce((sum, r) => sum + (r.elapsedMs ?? 0), 0), timeouts: responses.filter(r => r.timedOut).length, score: responses.filter(correct).length };
+  return { grade, label: levelLabel(grade), low, high, strengths, practice, elapsedMs: responses.reduce((sum, r) => sum + (r.elapsedMs ?? 0), 0), timeouts: responses.filter(r => r.timedOut).length, score: responses.filter(correct).length };
 }
