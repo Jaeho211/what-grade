@@ -18,7 +18,7 @@ describe('textbook math notation', () => {
     expect(html).not.toContain('^');
   });
   it('preserves Korean prose and ordinary math text', () => {
-    expect(renderToStaticMarkup(<MathText text="12 + 3 = ?" />)).toBe('12 + 3 = ?');
+    expect(renderToStaticMarkup(<MathText text="12 + 3 = ?" />)).toContain('<mn>12</mn><mo>+</mo><mn>3</mn><mo>=</mo><mo>?</mo>');
     const html = renderToStaticMarkup(<MathText text="√는 음이 아닌 제곱근입니다. √49 = 7입니다." />);
     expect(html).toContain('√는 음이 아닌 제곱근입니다. ');
     expect(html).toContain('<span class="math-radicand">49</span>');
@@ -26,7 +26,7 @@ describe('textbook math notation', () => {
   it('renders complete equations with italic variables and upright numbers', () => {
     const html = renderToStaticMarkup(<MathText text="3x + 2 = 17에서 x는?" />);
     expect(html).toContain('<mrow><mn>3</mn><mi>x</mi><mo>+</mo><mn>2</mn><mo>=</mo><mn>17</mn></mrow>');
-    expect(html).toContain('에서 ');
+    expect(html).toContain('에서</span> ');
     expect(html).toContain('<mrow><mi>x</mi></mrow>');
     expect(html).toContain('는?');
   });
@@ -77,7 +77,7 @@ describe('trigonometric notation', () => {
   it('preserves Korean prose and fractions in a complete trig equation', () => {
     const html = renderToStaticMarkup(<MathText text="각 A에서 sin A = 3/5입니다. 맞은편 변 = 빗변 × sin A" />);
     expect(html).toContain('각 ');
-    expect(html).toContain('입니다. 맞은편 변 ');
+    expect(html).toContain('입니다.</span> 맞은편 변 ');
     expect(html).toContain('<mo>=</mo><mfrac><mn>3</mn><mn>5</mn></mfrac>');
     expect(html.match(/mathvariant="normal">sin/g)).toHaveLength(2);
   });
@@ -98,5 +98,22 @@ describe('high school notation', () => {
     const html = renderToStaticMarkup(<MathText text="f(x) = 2x + 3, g(x) = x², i² = −1, k = 4" />);
     for (const letter of ['f', 'g', 'i', 'k']) expect(html).toContain(`<mi>${letter}</mi>`);
     expect(html).toContain('<msup>');
+  });
+});
+
+
+describe('consistent typography and wrapping', () => {
+  it('renders standalone numbers and complete coordinate pairs with the same math renderer', () => {
+    const html = renderToStaticMarkup(<MathText text="(x, y) = (4, 16)일 때 y = 24이면 x는?" />);
+    expect(html).toContain('<mi>x</mi><mo>,</mo><mi>y</mi>');
+    expect(html).toContain('<mn>4</mn><mo>,</mo><mn>16</mn>');
+    expect(html).toContain('<mn>24</mn>');
+    expect(html).toContain('</math>는?</span>');
+    expect(html).not.toContain('<wbr');
+  });
+  it('preserves explicit condition lines without breaking decimals', () => {
+    const html = renderToStaticMarkup(<MathText text={'x = 4일 때 y = 16입니다.\ny = 24일 때 x는?'} />);
+    expect(html).toContain('<br/>');
+    expect(renderToStaticMarkup(<MathText text="1.25" />)).toContain('<mn>1.25</mn>');
   });
 });

@@ -99,7 +99,7 @@ export default function App() {
           <div className="timer-track"><div style={{ width: `${remaining / QUESTION_SECONDS * 100}%` }} /></div>
         </div>
         <span className="question-label">QUESTION {String(responses.length + 1).padStart(2, '0')}</span>
-        <h1 className="question" ref={heading} tabIndex={-1}><MathText text={question.prompt} /></h1>
+        <h1 className="question" ref={heading} tabIndex={-1}><MathText text={question.prompt.length >= 45 ? question.prompt.replace(/([.!?]) +/g, '$1\n') : question.prompt} /></h1>
         <p className="question-help" id="choice-help">보기를 누르면 답이 확정돼요.</p>
         <div className="choices" role="group" aria-label="답 선택" aria-describedby="choice-help">{question.choices.map((choice, i) => <button key={`${question.id}-${i}`} className={`choice ${feedback?.selected === i ? feedback.right ? 'answered-right' : 'answered-wrong' : ''}`} disabled={feedback !== null} onClick={() => submit(i)}><span className="choice-number">{i + 1}</span><MathText text={choice} />{feedback?.selected === i && <span className="answer-mark">{feedback.right ? feedback.streak >= 3 ? `✓ ${feedback.streak}연속!` : '✓ 정답!' : '아깝다!'}</span>}</button>)}</div>
         <button className="skip" disabled={feedback !== null} onClick={() => submit(null, true)}>건너뛰기</button>

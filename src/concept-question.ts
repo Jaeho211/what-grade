@@ -26,7 +26,7 @@ export function generateConceptQuestion(template: Question, random = Math.random
     }
     case '정비례': {
       const a=int(2,5), x=int(2,5);
-      return number(`y는 x에 정비례합니다. (x, y) = (${x}, ${a*x})일 때, y = ${a*(x+2)}이면 x는?`,x+2,`비례상수는 ${a*x}/${x} = ${a}입니다. y를 ${a}로 나누면 x = ${x+2}입니다.`);
+      return number(`y는 x에 정비례합니다.\nx = ${x}일 때 y = ${a*x}입니다.\ny = ${a*(x+2)}일 때 x는?`,x+2,`비례상수는 ${a*x}/${x} = ${a}입니다. y를 ${a}로 나누면 x = ${x+2}입니다.`);
     }
     case '삼각형의 내각': {
       const a=int(3,8)*10, b=int(2,7)*10;

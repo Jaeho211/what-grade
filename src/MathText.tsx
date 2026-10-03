@@ -48,22 +48,31 @@ function expression(text: string): ReactNode[] {
 // Render whole mathematical runs, while preserving the surrounding Korean prose.
 // Single-character MathML identifiers use a mathematical italic font; numbers stay upright.
 export function MathText({ text }: { text: string }) {
-  const parts = text.split(/((?:(?:sin|cos|tan)(?=\s*[A-Zxynθ])|[√\d.abfgikxynA-Zθ()+−\-×÷=^²³?/ ])+)/g);
+  const parts = text.split(/((?:(?:sin|cos|tan)(?=\s*[A-Zxynθ])|[√\d.,abfgikxynA-Zθ(){}+−\-×÷=^²³?/ ])+)/g);
   return <>{parts.map((part, index) => {
-    if (!/sin|cos|tan|[abfgikxynA-Zθ^²³]|√\d|\d+\/\d+/.test(part)) return <Fragment key={index}>{part}</Fragment>;
+    if (!/\d|sin|cos|tan|[abfgikxynA-Zθ^²³]/.test(part)) return <Fragment key={index}>{part.split('\n').map((line, i) => <Fragment key={i}>{i > 0 && <br />}{line}</Fragment>)}</Fragment>;
     const leading = part.match(/^[., ]*/)![0];
     const trailing = part.match(/[., ]*$/)![0];
     const math = part.slice(leading.length, part.length - trailing.length);
+    // Keep Korean particles with their mathematical subject; preserve word spacing.
+    let suffix = parts[index + 1]?.match(/^[가-힣]+[.!?]?/)?.[0] ?? '';
+    if (suffix) {
+      parts[index + 1] = parts[index + 1].slice(suffix.length);
+      if (!parts[index + 1] && /^[.!?]/.test(parts[index + 2] ?? '')) {
+        suffix += parts[index + 2][0];
+        parts[index + 2] = parts[index + 2].slice(1);
+      }
+    }
     const hasFraction = /\d+\/\d+/.test(math);
     // A fraction stays whole. Long fraction calculations can wrap before an equals sign.
-    const segments = hasFraction ? math.split(/(?==)/) : [math];
+    const segments = hasFraction || math.length > 24 ? math.split(/(?==)/) : [math];
     return <Fragment key={index}>{leading}{segments.map((segment, i) =>
-      <Fragment key={i}>{i > 0 && <wbr />}{createElement('math', {
+      <Fragment key={i}>{i > 0 && <wbr />}<span className="math-unit">{createElement('math', {
         className: `math-notation${hasFraction ? ' math-fraction' : ''}`,
         xmlns: 'http://www.w3.org/1998/Math/MathML',
         ...(hasFraction ? { displaystyle: 'true' } : {}),
         'aria-label': segment.trim().replace(/(\d+)\/(\d+)/g, '$2분의 $1').replace(/√/g, '루트 ').replace(/\^/g, '의 ').replace(/²/g, '의 제곱').replace(/³/g, '의 세제곱'),
-      }, createElement('mrow', null, ...expression(segment)))}</Fragment>
+      }, createElement('mrow', null, ...expression(segment)))}{i === segments.length - 1 && suffix}</span></Fragment>
     )}{trailing}</Fragment>;
   })}</>;
 }

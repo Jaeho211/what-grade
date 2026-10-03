@@ -153,3 +153,10 @@ summary { min-height: 56px; font-size: 15px; }
 .math-radical { display: inline-flex; align-items: flex-start; vertical-align: middle; white-space: nowrap; font-family: 'Noto Sans KR', sans-serif; font-size: 1em; font-weight: 400; }
 .math-radical-sign { display: block; width: .625em; height: 1.25em; flex: 0 0 .625em; overflow: visible; }
 .math-radicand { display: block; border-top: .0625em solid currentColor; margin-top: .03125em; padding: .05em .08em 0 .02em; line-height: 1.15; }
+
+/* Readable prose and complete mathematical units on narrow screens. */
+.question { font-weight: 500; letter-spacing: 0; line-height: 1.65; font-size: clamp(23px, 5.8vw, 30px); word-break: keep-all; overflow-wrap: normal; }
+.question span { color: inherit; }
+.math-unit { display: inline-block; white-space: nowrap; letter-spacing: normal; }
+.math-notation { font-weight: 400; font-style: normal; letter-spacing: normal; }
+.question .math-unit { margin-inline: .035em; }
