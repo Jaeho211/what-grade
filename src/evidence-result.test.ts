@@ -32,10 +32,11 @@ describe('whole-quiz evidence', () => {
     expect(failed.grade).toBe(4);
     expect(failed.supported).toBe(false);
   });
-  it('prioritizes a domain without a successful answer even after previous attempts', () => {
+  it('prioritizes unseen concepts over retrying a failed domain', () => {
     const responses = [answer('직사각형의 넓이', 5, false), answer('약수', 5),
       answer('직사각형의 넓이', 5, false), answer('평균', 5)];
-    expect(nextQuestion(responses, () => 0)!.domain).toBe('도형');
+    const question = nextQuestion(responses, () => 0)!;
+    expect(responses.some(r => r.question.concept === question.concept)).toBe(false);
   });
   it('uses remaining questions to confirm middle three after two high-one misses', () => {
     const responses: Response[] = [];
