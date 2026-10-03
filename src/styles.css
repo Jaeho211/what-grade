@@ -134,3 +134,12 @@ summary { min-height: 56px; font-size: 15px; }
 @media (min-width: 761px) and (max-width: 1366px) { .choice.answered-right, .choice.answered-wrong, .choice.answered-right:hover, .choice.answered-wrong:hover { padding: 21px; } }
 
 .feedback-announcement { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Display-size fractions keep their numerator and denominator legible. */
+.math-fraction { vertical-align: middle; margin-block: .15em; }
+.fraction-question .choice { min-height: 78px; }
+.fraction-question .choices { align-items: stretch; }
+.explanation:has(.math-fraction) { line-height: 2.4; }
+.explanation .math-fraction { font-size: 1.15em; }
+.review summary:has(.math-fraction) { min-height: 74px; }
+@media (min-width: 761px) and (max-width: 1366px) { .fraction-question .choice { min-height: 100px; } }

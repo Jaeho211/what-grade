@@ -39,4 +39,25 @@ describe('textbook math notation', () => {
     expect(html).toContain('<mi>x</mi><mo>−</mo><mi>y</mi>');
   });
 
+  it('stacks fractions and keeps addition denominators unchanged', () => {
+    const html = renderToStaticMarkup(<MathText text="2/6 + 2/6 = 4/6" />);
+    expect(html).toContain('<mfrac><mn>4</mn><mn>6</mn></mfrac>');
+    expect(html).toContain('displaystyle="true"');
+    expect(html).toContain('6분의 4');
+    expect(html).not.toContain('<mo>/</mo>');
+  });
+  it('allows wrapping before equality without splitting a fraction', () => {
+    const html = renderToStaticMarkup(<MathText text="2/3 ÷ 2 = 2/6 = 1/3입니다." />);
+    expect(html.match(/<wbr\/?>/g)).toHaveLength(2);
+    expect(html).toContain('<mfrac><mn>1</mn><mn>3</mn></mfrac>');
+    expect(html).toContain('입니다.');
+  });
+  it('places a negative sign outside the fraction and uses integers for denominator one', () => {
+    const html = renderToStaticMarkup(<MathText text="−2/3" />);
+    expect(html).toContain('<mo>−</mo><mfrac><mn>2</mn><mn>3</mn></mfrac>');
+    const integer = renderToStaticMarkup(<MathText text="2/1" />);
+    expect(integer).toContain('<mn>2</mn>');
+    expect(integer).not.toContain('<mfrac>');
+  });
+
 });

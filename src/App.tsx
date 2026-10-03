@@ -83,7 +83,7 @@ export default function App() {
         <section className="how"><div><b>01</b><span>빠르게 풀고</span><p>내 답에 맞춰 달라지는 문제</p></div><div><b>02</b><span>수학 나이 확인</span><p>나는 과연 몇 학년일까?</p></div><div><b>03</b><span>친구에게 도전장</span><p>친구는 몇 학년으로 나올까?</p></div></section>
       </div>}
       <span className="feedback-announcement" role="status" aria-live="polite" aria-atomic="true">{feedback ? feedback.timedOut ? '시간 끝! 다음으로 넘어가요.' : feedback.right ? feedback.streak >= 3 ? `정답! ${feedback.streak}연속 정답!` : '정답!' : '아깝다! 다음 문제에 도전해요.' : ''}</span>
-      {screen === 'quiz' && question && <section className="quiz panel">
+      {screen === 'quiz' && question && <section className={`quiz panel ${question.choices.some(choice => /\d+\/\d+/.test(choice)) ? 'fraction-question' : ''}`}>
         <div className="quiz-top"><span className="eyebrow">나의 수학 나이 도전 중</span><span className="counter">{responses.length + 1} <span>/ {TOTAL}</span></span></div>
         <div className="progress" role="progressbar" aria-label="답변 완료" aria-valuenow={responses.length} aria-valuemin={0} aria-valuemax={TOTAL}><div style={{ width: `${responses.length / TOTAL * 100}%` }} /></div>
         <div className={`timer ${remaining <= 5 ? 'urgent' : ''}`}>
