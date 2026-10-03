@@ -17,7 +17,7 @@ describe('question bank', () => {
     expect(new Set(questions.map(q => q.id)).size).toBe(questions.length);
     for (const q of questions) {
       expect(q.grade).toBeGreaterThanOrEqual(1);
-      expect(q.grade).toBeLessThanOrEqual(q.schoolLevel === 'middle' ? 3 : 6);
+      expect(q.grade).toBeLessThanOrEqual(q.schoolLevel === 'high' ? 1 : q.schoolLevel === 'middle' ? 3 : 6);
       expect(q.choices[q.answer]).toBeDefined();
       expect(new Set(q.choices).size).toBe(q.choices.length);
     }
@@ -31,14 +31,14 @@ describe('adaptive quiz', () => {
     expect(nextQuestion(responses)).toBeUndefined();
     const summary = result(responses);
     expect(summary.low).toBeGreaterThanOrEqual(1);
-    expect(summary.high).toBeLessThanOrEqual(9);
+    expect(summary.high).toBeLessThanOrEqual(10);
   });
   it('keeps the level after one answer and raises after two correct answers', () => {
     const responses = run('correct');
     expect(targetGrade(responses.slice(0, 1))).toBe(5);
     expect(targetGrade(responses.slice(0, 2))).toBe(6);
     expect(result(responses).score).toBe(10);
-    expect(targetGrade(responses)).toBe(9);
+    expect(targetGrade(responses)).toBe(10);
     expect(result(responses).supported).toBe(true);
   });
   it('checks a different concept within each pair and preserves the answer when shuffling', () => {

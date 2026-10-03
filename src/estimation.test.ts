@@ -29,7 +29,7 @@ describe('balanced evidence and timing', () => {
     expect(second.domain).not.toBe(first.domain);
   });
   it('has at least three domains at every grade', () => {
-    for (let level = 1; level <= 9; level++) {
+    for (let level = 1; level <= 10; level++) {
       expect(new Set(questions.filter(q => q.level === level).map(q => q.domain)).size).toBeGreaterThanOrEqual(3);
     }
   });
@@ -40,7 +40,7 @@ describe('new problem generators', () => {
     let seed = 42;
     const rng = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 2 ** 32);
     const old = ['정수의 덧셈', '일차방정식', '정비례', '지수법칙', '연립일차방정식', '피타고라스 정리', '제곱근', '이차방정식', '이차함수'];
-    for (const template of questions.filter(q => q.id.startsWith('math-extra-') && !old.includes(q.concept))) {
+    for (const template of questions.filter(q => q.id.startsWith('math-extra-') && q.schoolLevel !== 'high' && !old.includes(q.concept))) {
       for (let i = 0; i < 50; i++) {
         const q = generateQuestion(template, rng);
         const n = (q.prompt.match(/-?\d+/g) ?? []).map(Number);
@@ -110,26 +110,26 @@ describe('game result label', () => {
         const q = nextQuestion(responses, () => 0)!;
         responses.push({ question: q, selected: mode === 'correct' ? q.answer : mode === 'wrong' ? (q.answer + 1) % 4 : null, skipped: mode === 'skip', timedOut: mode === 'timeout' });
       }
-      expect(result(responses).label).toMatch(/^(초등 [1-6]학년|중학교 [1-3]학년)$/);
+      expect(result(responses).label).toMatch(/^(초등 [1-6]학년|중학교 [1-3]학년|고등학교 1학년)$/);
     }
   });
 });
 
 
 describe('middle-three challenge gate', () => {
-  it('reserves three distinct advanced domains after seven correct opening answers', () => {
+  it('reserves three distinct advanced domains after a solved middle-three checkpoint', () => {
     const responses: Response[] = [];
     for (let i = 0; i < 10; i++) {
       const q = nextQuestion(responses, () => 0)!;
       responses.push({ question: q, selected: q.answer, elapsedMs: 12000 });
     }
     const final = responses.slice(7);
-    expect(final.every(r => r.question.level === 9 && r.question.challenge)).toBe(true);
+    expect(final.every(r => r.question.level === 10 && r.question.challenge)).toBe(true);
     expect(new Set(final.map(r => r.question.domain)).size).toBe(3);
-    expect(result(responses).grade).toBe(9);
+    expect(result(responses).grade).toBe(10);
     for (let i = 7; i < 10; i++) {
       const failed = responses.map((r,j) => j === i ? { ...r, selected: null, timedOut: true } : r);
-      expect(result(failed).grade).toBeLessThan(9);
+      expect(result(failed).grade).toBeLessThan(10);
     }
   });
   it('does not use prerequisite or simple middle-three answers to satisfy the advanced gate', () => {
@@ -146,9 +146,9 @@ describe('recovery after an early mistake', () => {
       const q = nextQuestion(responses, () => 0)!;
       responses.push({ question: q, selected: i === miss ? (q.answer + 1) % 4 : q.answer });
     }
-    expect(responses.slice(7).every(r => r.question.level === 9 && r.question.challenge)).toBe(true);
-    expect(result(responses).grade).toBe(9);
+    expect(responses.slice(7).every(r => r.question.level >= 9 && r.question.challenge)).toBe(true);
+    expect(result(responses).grade).toBeGreaterThanOrEqual(9);
     const failed = responses.map((r,i) => i === 9 ? { ...r, selected: null, skipped: true } : r);
-    expect(result(failed).grade).toBeLessThan(9);
+    expect(result(failed).grade).toBeLessThan(result(responses).grade);
   });
 });

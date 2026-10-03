@@ -265,6 +265,47 @@ export function generateQuestion(template: Question, random = Math.random): Ques
       const a = int(10, 30), d = int(2, 8);
       return numeric(`두 자료 ${a - d}, ${a + d}의 표준편차는?`, d, `평균은 ${a}, 분산은 ${d * d}이므로 표준편차는 ${d}입니다.`);
     }
+    case '나머지정리': {
+      const a = int(1, 4), b = int(1, 5), c = int(1, 8), k = int(1, 3);
+      const remainder = a * k * k + b * k + c;
+      return numeric(`다항식 ${a}x² + ${b}x + ${c}을 x − ${k}로 나눈 나머지는?`, remainder,
+        `나머지정리에 따라 x = ${k}를 대입하면 ${a} × ${k}² + ${b} × ${k} + ${c} = ${remainder}입니다.`);
+    }
+    case '판별식': {
+      const a = int(1, 3), h = int(2, 6), b = 2 * a * h, k = a * h * h;
+      return numeric(`${a}x² − ${b}x + k = 0이 실수 범위에서 중근을 가질 때 k는?`, k,
+        `판별식이 0이므로 ${b}² − 4 × ${a} × k = 0입니다. 따라서 k = ${k}입니다.`);
+    }
+    case '복소수의 계산': {
+      const a = int(1, 6), b = int(1, 6);
+      return numeric(`i² = −1일 때 (${a} + i)(${b} − i)의 실수 부분은?`, a * b + 1,
+        `전개하면 ${a * b} + (${b} − ${a})i − i²입니다. 실수 부분은 ${a * b} + 1 = ${a * b + 1}입니다.`);
+    }
+    case '조합': {
+      const n = int(4, 15), value = n * (n - 1) / 2;
+      return numeric(`서로 다른 ${n}명 중 대표 2명을 순서 없이 고르는 방법은 몇 가지인가요?`, value,
+        `${n} × ${n - 1}을 순서가 겹치는 2가지로 나누면 ${value}가지입니다.`);
+    }
+    case '집합의 원소 수': {
+      const common = int(1, 4), onlyA = int(1, 6), onlyB = int(1, 6), value = onlyA + onlyB + common;
+      return numeric(`집합 A의 원소가 ${onlyA + common}개, B의 원소가 ${onlyB + common}개이고 공통 원소가 ${common}개입니다. 합집합의 원소는 몇 개인가요?`, value,
+        `공통 원소를 한 번 빼면 ${onlyA + common} + ${onlyB + common} − ${common} = ${value}개입니다.`);
+    }
+    case '합성함수': {
+      const a = int(2, 4), b = int(1, 6), k = int(2, 4), value = a * k * k + b;
+      return numeric(`f(x) = ${a}x + ${b}, g(x) = x²일 때 f(g(${k}))는?`, value,
+        `g(${k}) = ${k * k}이므로 f(${k * k}) = ${a} × ${k * k} + ${b} = ${value}입니다.`);
+    }
+    case '역함수': {
+      const a = int(2, 5), b = int(1, 8), x = int(2, 8), y = a * x + b;
+      return numeric(`실수 전체에서 f(x) = ${a}x + ${b}입니다. 역함수가 ${y}를 입력받으면 출력은?`, x,
+        `${a}x + ${b} = ${y}를 풀면 x = ${x}입니다. 역함수는 입력과 출력을 되돌립니다.`);
+    }
+    case '원의 방정식': {
+      const h = int(1, 6), k = int(1, 6), r = int(2, 9);
+      return numeric(`원 (x − ${h})² + (y − ${k})² = ${r * r}의 반지름은?`, r,
+        `원의 방정식 오른쪽은 반지름의 제곱입니다. 반지름은 √${r * r} = ${r}입니다.`);
+    }
     default: throw new Error(`지원하지 않는 문제 유형: ${template.concept}`);
   }
 }

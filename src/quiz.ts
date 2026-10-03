@@ -7,7 +7,7 @@ import grade5 from '../data/questions/math/grade-5.json';
 import grade6 from '../data/questions/math/grade-6.json';
 
 export type Question = {
-  id: string; schoolLevel: 'elementary' | 'middle'; grade: number; level: number; concept: string; domain?: string; expectedMs?: number; challenge?: boolean; prompt: string;
+  id: string; schoolLevel: 'elementary' | 'middle' | 'high'; grade: number; level: number; concept: string; domain?: string; expectedMs?: number; challenge?: boolean; prompt: string;
   choices: string[]; answer: number; explanation: string;
 };
 export type Response = { question: Question; selected: number | null; elapsedMs?: number; timedOut?: boolean; skipped?: boolean };
@@ -38,20 +38,26 @@ const challengeConcepts: [number, string, string, number][] = [
   [9, '이차함수의 꼭짓점', '함수', 17000], [9, '삼각비로 길이 구하기', '도형', 17000],
   [9, '표준편차', '자료와 가능성', 17000],
 ];
-addedConcepts.push(...challengeConcepts);
+const highConcepts: [number, string, string, number][] = [
+  [10, '나머지정리', '문자와 식', 17000], [10, '판별식', '문자와 식', 17000],
+  [10, '복소수의 계산', '문자와 식', 15000], [10, '조합', '자료와 가능성', 17000],
+  [10, '집합의 원소 수', '자료와 가능성', 17000], [10, '합성함수', '함수', 17000],
+  [10, '역함수', '함수', 17000], [10, '원의 방정식', '도형', 17000],
+];
+addedConcepts.push(...challengeConcepts, ...highConcepts);
 const extra: Question[] = addedConcepts.flatMap(([level, concept, domain, expectedMs]) =>
   Array.from({ length: 4 }, (_, slot) => ({
-    id: `math-extra-${level}-${concept}-${slot + 1}`, schoolLevel: level <= 6 ? 'elementary' as const : 'middle' as const,
-    grade: level <= 6 ? level : level - 6, level, concept, domain, expectedMs,
-    challenge: challengeConcepts.some(([, name]) => name === concept),
+    id: `math-extra-${level}-${concept}-${slot + 1}`, schoolLevel: level <= 6 ? 'elementary' as const : level <= 9 ? 'middle' as const : 'high' as const,
+    grade: level <= 6 ? level : level <= 9 ? level - 6 : level - 9, level, concept, domain, expectedMs,
+    challenge: level === 10 || challengeConcepts.some(([, name]) => name === concept),
     prompt: '', choices: [], answer: 0, explanation: '',
   })));
 // Concrete samples keep the exported bank usable for previews and validation.
 export const questions: Question[] = [...elementary.map(q => ({ ...q, expectedMs: 10000 })), ...extra.map(q => generateQuestion(q, () => 0))];
 export const START_LEVEL = 5;
-export const MAX_LEVEL = 9;
+export const MAX_LEVEL = 10;
 export function levelLabel(level: number): string {
-  return level <= 6 ? `초등 ${level}학년` : `중학교 ${level - 6}학년`;
+  return level <= 6 ? `초등 ${level}학년` : level <= 9 ? `중학교 ${level - 6}학년` : `고등학교 ${level - 9}학년`;
 }
 export const TOTAL = 10;
 export const correct = (response: Response) => response.selected === response.question.answer;
@@ -73,12 +79,14 @@ export function targetGrade(responses: Response[]): number {
       }
     }
   }
-  // Once middle-two is solved after a strong recent streak, reserve the final three challenges.
+  // A strong opening earns a middle-three checkpoint before the high-school challenge.
+  if (responses.length === 6 && responses.slice(-3).every(correct) && responses.at(-1)!.question.level >= 7) return 9;
+  // Reserve three diverse challenges; an early recovery can still finish at middle three.
   // Past mistakes do not lock the player out; the advanced answers still decide the result.
   if (responses.length >= 7) {
     const opening = responses.slice(0, 7);
     const last = opening.at(-1)!;
-    if (last.question.level >= 8 && correct(last) && opening.slice(-3).every(correct)) return MAX_LEVEL;
+    if (last.question.level >= 8 && correct(last) && opening.slice(-3).every(correct)) return last.question.level >= 9 ? MAX_LEVEL : 9;
   }
   return grade;
 }
@@ -131,8 +139,8 @@ export function result(responses: Response[]) {
   const target = targetGrade(responses);
   // A single specialty cannot establish a grade. Evidence includes its adjacent prerequisite level.
   const qualified = (level: number) => {
-    if (level === MAX_LEVEL) {
-      const advanced = responses.filter(r => correct(r) && r.question.level === MAX_LEVEL && r.question.challenge);
+    if (level >= 9) {
+      const advanced = responses.filter(r => correct(r) && r.question.level >= level && r.question.challenge);
       return advanced.length >= 3 && new Set(advanced.map(r => r.question.domain)).size >= 3;
     }
     const evidence = responses.filter(r => correct(r) && r.question.level >= Math.max(1, level - 1));

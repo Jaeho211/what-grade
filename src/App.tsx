@@ -83,7 +83,7 @@ export default function App() {
           <h1 ref={heading} tabIndex={-1}>당신의 수학 나이는<br /><span>몇 학년?</span></h1>
           {sharedRecord && <div className="shared-record" role="note"><span>친구가 공유한 수학 기록</span><strong>{levelLabel(sharedRecord.grade)}</strong><p>10문제 중 {sharedRecord.score}개 정답 · {sharedRecord.seconds}초</p><p>나는 몇 학년일까? 같은 도전에 참여해보세요!</p></div>}
           <p className="lead">분명 배웠는데, 20초 안에 풀 수 있을까?<br />10문제로 나의 수학 나이를 확인해보세요.</p>
-          <div className="chips"><span>✦ 초등 1학년~중3</span><span>◷ 문제마다 20초</span><span>↗ 로그인 없이</span></div>
+          <div className="chips"><span>✦ 초등 1학년~고1</span><span>◷ 문제마다 20초</span><span>↗ 로그인 없이</span></div>
           <button className="primary start" onClick={start}>도전 시작 <span>→</span></button>
           <p className="fine">보기를 누르면 답이 확정돼요. 준비되면 도전!</p>
         </section>
@@ -106,7 +106,7 @@ export default function App() {
         <p className="fine center">시간이 끝나면 자동으로 넘어가요. 해설은 끝나고 확인!</p>
       </section>}
       {screen === 'result' && <section className="results">
-        <div className="result-hero"><span className="eyebrow">YOUR MATH MOMENT</span><div className="result-icon">✦</div><h1 ref={heading} tabIndex={-1}>당신의 수학 나이는</h1><p className="grade">{summary.label}</p><p className="lead">{summary.grade === 9 ? '중3까지 도달! 수학 감각 최고예요 🏆' : summary.grade >= 7 ? '중학교 수학까지! 멋진 도전이었어요 😎' : summary.grade >= 5 ? '수학 감각, 아직 살아있네요 😎' : summary.grade >= 3 ? '오랜만인데 꽤 잘 풀었는데요! ✨' : '한 번 더! 이번엔 올라갈 수 있어요 🚀'}</p><span className="score">10문제 중 {summary.score}개 정답 · {formatTime(summary.elapsedMs)}</span><p className="fine">재미로 보는 수학 나이예요. 실제 학년이나 수학 능력을 의미하지 않아요.</p></div>
+        <div className="result-hero"><span className="eyebrow">YOUR MATH MOMENT</span><div className="result-icon">✦</div><h1 ref={heading} tabIndex={-1}>당신의 수학 나이는</h1><p className="grade">{summary.label}</p><p className="lead">{summary.grade === 10 ? '고1까지 도달! 수학 감각 최고예요 🏆' : summary.grade === 9 ? '중3까지 도달! 수학 감각 최고예요 🏆' : summary.grade >= 7 ? '중학교 수학까지! 멋진 도전이었어요 😎' : summary.grade >= 5 ? '수학 감각, 아직 살아있네요 😎' : summary.grade >= 3 ? '오랜만인데 꽤 잘 풀었는데요! ✨' : '한 번 더! 이번엔 올라갈 수 있어요 🚀'}</p><span className="score">10문제 중 {summary.score}개 정답 · {formatTime(summary.elapsedMs)}</span><p className="fine">재미로 보는 수학 나이예요. 실제 학년이나 수학 능력을 의미하지 않아요.</p></div>
         <p className="fine center">{summary.supported ? summary.speed : '다음 도전에서는 더 많은 유형을 맞혀보세요!'}</p>
         <p className="best-streak">✨ 최고 연속 정답 <strong>{summary.bestStreak}회</strong></p>
         {summary.skips > 0 && <p className="fine center">건너뛴 문제 {summary.skips}개 · 정답과 해설을 확인해보세요.</p>}
@@ -115,6 +115,6 @@ export default function App() {
         {notice.startsWith('공유하지') && <textarea className="share-fallback" readOnly value={shareText} aria-label="복사할 결과 문구" onFocus={e => e.target.select()} />}
         <details className="review"><summary className="review-heading">정답 확인 <span>{TOTAL}문제</span></summary><div>{responses.map((response, i) => <details key={response.question.id}><summary><span className={correct(response) ? 'right' : 'wrong'}>{correct(response) ? '✓' : '−'}</span><span>{i + 1}. <MathText text={response.question.prompt} /></span><span className="expand">＋</span></summary><div className="explanation"><p>내 답: {response.selected === null ? (response.timedOut ? '시간 초과' : '건너뛰기') : <MathText text={response.question.choices[response.selected]} />}</p><p><strong>정답: <MathText text={response.question.choices[response.question.answer]} /></strong></p><p><MathText text={response.question.explanation} /></p></div></details>)}</div></details>
       </section>}
-    </main><footer><span>몇 학년? · 도전하는 재미</span><span>수학 편 / 초등~중학교</span></footer>
+    </main><footer><span>몇 학년? · 도전하는 재미</span><span>수학 편 / 초등~고1</span></footer>
   </div>;
 }

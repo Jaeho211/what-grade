@@ -8,10 +8,10 @@ const origin='https://what-grade.quiz-lab.workers.dev';
 const env={ASSETS:{fetch:async () => new Response(readFileSync('index.html','utf8'),{headers:{'Content-Type':'text/html'}})}};
 describe('result sharing', () => {
   it('round trips distinct records and rejects malformed or out-of-range URLs', () => {
-    const record={grade:9,score:10,seconds:46};
+    const record={grade:10,score:10,seconds:46};
     expect(parseSharedRecord(sharePath(record))).toEqual(record);
     expect(sharePath({...record,seconds:47})).not.toBe(sharePath(record));
-    for(const path of ['/share/v1/10/10/46','/share/v1/9/11/46','/share/v1/9/10/201','/share/v1/9/10/-1','/share/v1/9/10/046','/share/v1/<script>/10/46']) expect(parseSharedRecord(path)).toBeNull();
+    for(const path of ['/share/v1/11/10/46','/share/v1/9/11/46','/share/v1/9/10/201','/share/v1/9/10/-1','/share/v1/9/10/046','/share/v1/<script>/10/46']) expect(parseSharedRecord(path)).toBeNull();
   });
   it('serves record-specific metadata to crawlers without JavaScript', async () => {
     const html=await (await worker.fetch(new Request(origin+'/share/v1/9/10/46'),env)).text();
@@ -19,6 +19,8 @@ describe('result sharing', () => {
     expect(html).toContain('10문제 중 10개 정답 · 46초');
     expect(html).toContain('property="og:image" content="'+origin+'/share-card/v1/9/10/46.png"');
     expect(html).toContain('<div id="root">');
+    const high=await (await worker.fetch(new Request(origin+'/share/v1/10/10/46'),env)).text();
+    expect(high).toContain('고등학교 1학년');
     const other=await (await worker.fetch(new Request(origin+'/share/v1/5/7/99'),env)).text();
     expect(other).toContain('초등 5학년');
     expect(other).toContain('7개 정답 · 99초');
@@ -36,7 +38,7 @@ describe('result sharing', () => {
     }
     expect(inflateSync(payload).length).toBe((800*3+1)*420);
     expect(png).not.toEqual(await shareImage({grade:9,score:9,seconds:47}));
-    writeFileSync('/tmp/what-grade-share-preview.png',png);
+    writeFileSync('/tmp/what-grade-share-preview.png',await shareImage({grade:10,score:10,seconds:46}));
   });
   it('handles image routes, HEAD and invalid records while preserving ordinary assets', async () => {
     const image=await worker.fetch(new Request(origin+'/share-card/v1/9/10/46.png'),env);

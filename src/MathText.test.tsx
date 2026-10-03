@@ -91,3 +91,12 @@ it('draws all three radicals in the reported mobile problem, including after the
   expect(html).toContain('<mi>n</mi><mtext><span class="math-radical"');
   expect(html).toContain('aria-label="루트 27 + 루트 147 = n루트 3"');
 });
+
+
+describe('high school notation', () => {
+  it('renders function names and complex units as mathematical identifiers', () => {
+    const html = renderToStaticMarkup(<MathText text="f(x) = 2x + 3, g(x) = x², i² = −1, k = 4" />);
+    for (const letter of ['f', 'g', 'i', 'k']) expect(html).toContain(`<mi>${letter}</mi>`);
+    expect(html).toContain('<msup>');
+  });
+});
