@@ -120,5 +120,5 @@ export function result(responses: Response[]) {
   const high = Math.min(MAX_LEVEL, grade + 1);
   const strengths = [...new Set(responses.filter(correct).map(r => r.question.concept))];
   const practice = [...new Set(responses.filter(r => !correct(r)).map(r => r.question.concept))];
-  return { bestStreak: streakStats(responses).best, grade, label: supported ? `${levelLabel(low)}~${levelLabel(high)} 수준` : '학년 판정 보류', confidence, speed, supported, low, high, strengths, practice, elapsedMs: responses.reduce((sum, r) => sum + (r.elapsedMs ?? 0), 0), skips: responses.filter(r => r.skipped).length, timeouts: responses.filter(r => r.timedOut).length, score: responses.filter(correct).length };
+  return { bestStreak: streakStats(responses).best, grade, label: levelLabel(grade), confidence, speed, supported, low, high, strengths, practice, elapsedMs: responses.reduce((sum, r) => sum + (r.elapsedMs ?? 0), 0), skips: responses.filter(r => r.skipped).length, timeouts: responses.filter(r => r.timedOut).length, score: responses.filter(correct).length };
 }

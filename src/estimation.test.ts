@@ -10,7 +10,7 @@ describe('balanced evidence and timing', () => {
   it('does not infer middle three from Pythagoras alone or fast answers in one domain', () => {
     const only = Array.from({ length: 10 }, () => response('피타고라스 정리', 8, 2000));
     expect(result(only).supported).toBe(false);
-    expect(result(only).label).toBe('학년 판정 보류');
+    expect(result(only).label).toBe('초등 1학년');
   });
   it('does not award an untested grade and uses time only for confidence', () => {
     const evidence = [response('약수', 5), response('직사각형의 넓이', 5), response('평균', 5)];
@@ -78,6 +78,20 @@ describe('new problem generators', () => {
         expect(values.filter(v => Math.abs(v-expected) < 1e-9)).toHaveLength(1);
         expect(new Set(q.choices).size).toBe(4);
       }
+    }
+  });
+});
+
+
+describe('game result label', () => {
+  it('always returns a single grade for correct, wrong, skipped, and timeout responses', () => {
+    for (const mode of ['correct', 'wrong', 'skip', 'timeout']) {
+      const responses: Response[] = [];
+      for (let i = 0; i < 10; i++) {
+        const q = nextQuestion(responses, () => 0)!;
+        responses.push({ question: q, selected: mode === 'correct' ? q.answer : mode === 'wrong' ? (q.answer + 1) % 4 : null, skipped: mode === 'skip', timedOut: mode === 'timeout' });
+      }
+      expect(result(responses).label).toMatch(/^(초등 [1-6]학년|중학교 [1-3]학년)$/);
     }
   });
 });
