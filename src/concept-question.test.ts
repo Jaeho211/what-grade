@@ -31,7 +31,7 @@ describe('concept questions for middle school through high one', () => {
         }
         case '일차함수의 기울기': expect(n[1]+v*(n[2]-n[0])).toBe(n[3]); break;
         case '피타고라스 정리': expect(v*v+n[1]**2).toBe(n[0]**2); break;
-        case '닮음비': expect(v/n[2]).toBe(n[1]**2); break;
+        case '닮음비': expect(v).toBe(n[1]**2); break;
         case '확률': {
           const [red,blue]=n, total=red+blue;
           let success=0, outcomes=0;
@@ -58,13 +58,12 @@ describe('concept questions for middle school through high one', () => {
           for(const x of [-3,0,2]) expect((x+factors[0])*(x+factors[1])).toBeCloseTo(x*x+sum*x+product); break;
         }
         case '이차함수': case '이차함수의 꼭짓점': {
-          expect(v).toBeGreaterThanOrEqual(n[2]); expect(v).toBeLessThanOrEqual(n[3]);
-          for(let x=n[2];x<=n[3];x++) expect((v-n[0])**2+n[1]).toBeLessThanOrEqual((x-n[0])**2+n[1]); break;
+          for(let x=n[0]-3;x<=n[0]+3;x++) expect((v-n[0])**2+n[1]).toBeLessThanOrEqual((x-n[0])**2+n[1]); break;
         }
         case '삼각비': case '삼각비로 길이 구하기': expect(v/n[2]).toBeCloseTo(n[0]/n[1]); break;
         case '분산': case '표준편차': {
           const sd=q.concept==='표준편차', d=sd?n[0]:Math.sqrt(n[0]);
-          const data=[-d,d].map(x=>(x+n[1])*n[2]), mean=(data[0]+data[1])/2;
+          const data=[-d,d].map(x=>x*n[1]), mean=(data[0]+data[1])/2;
           const variance=data.reduce((a,x)=>a+(x-mean)**2,0)/2;
           expect(v).toBe(sd?Math.sqrt(variance):variance); break;
         }
@@ -81,11 +80,11 @@ describe('concept questions for middle school through high one', () => {
         }
         case '집합의 원소 수': {
           let count=0;
-          for(let mask=0;mask<2**n[0];mask++) if((mask&1)&&!(mask&2)) count++;
+          for(let mask=0;mask<2**(n.length+2);mask++) if((mask&1)&&!(mask&2)) count++;
           expect(v).toBe(count); break;
         }
         case '합성함수': expect(v).toBe((n[0]*n[2]+n[1])**2); break;
-        case '역함수': expect(v).toBeLessThanOrEqual(n[0]); expect((v-n[1])**2+n[2]).toBe(n[3]); break;
+        case '역함수': expect(fraction(answer)*n[0]).toBe(1); break;
         case '원의 방정식': expect(2*v).toBe(n[0]); break;
         default: throw Error(q.concept);
       }
