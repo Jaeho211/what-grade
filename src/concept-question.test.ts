@@ -16,6 +16,38 @@ describe('concept questions for middle school through high one', () => {
       expect(new Set(q.choices).size, q.concept).toBe(4);
       expect(q.explanation.replaceAll('−','-'), q.concept).toContain(answer.replaceAll('−','-'));
       switch(q.concept) {
+        case '일차함수의 축과 교점': expect(n[0]*v-n[1]).toBe(0); break;
+        case '닮은 삼각형의 대응변': expect(v/n[2]).toBe(n[1]/n[0]); break;
+        case '두 자리 수의 경우의 수': {
+          let count=0;
+          for(let tens=1;tens<=n[1];tens++) for(let ones=1;ones<=n[1];ones++) if(tens>ones) count++;
+          expect(v).toBe(count); break;
+        }
+        case '이차함수의 대칭': {
+          expect(v).not.toBe(n[2]);
+          expect((v-n[0])**2+n[1]).toBe((n[2]-n[0])**2+n[1]); break;
+        }
+        case '이차방정식의 활용': expect(v).toBeGreaterThan(0); expect(v*(v+n[0])).toBe(n[1]); break;
+        case '원주각과 중심각': expect(v/2).toBe(n[0]); break;
+        case '명제의 반례': {
+          expect(v%n[0]).toBe(0); expect(v%n[1]).not.toBe(0);
+          for(const wrong of q.choices.filter(choice=>choice!==answer)) expect(Number(wrong)%n[1]).toBe(0);
+          break;
+        }
+        case '다항식의 항등식': {
+          const a=n[2]-n[1];
+          for(const x of [-3,0,2,7]) expect(a*(x+n[0])+n[1]*x).toBe(n[2]*x+v);
+          break;
+        }
+        case '순열의 조건': {
+          let count=0;
+          const enumerate=(order:number[], remaining:number[])=>{
+            if(!remaining.length) { if(Math.abs(order.indexOf(0)-order.indexOf(1))===1) count++; return; }
+            for(const item of remaining) enumerate([...order,item],remaining.filter(x=>x!==item));
+          };
+          enumerate([],Array.from({length:n[0]},(_,i)=>i));
+          expect(v).toBe(count); break;
+        }
         case '정수의 덧셈': expect(v+n[0]).toBe(n[1]); break;
         case '정수의 곱셈': expect(n[0]*v).toBe(n[1]); break;
         case '일차방정식': expect(n[0]*(v+n[1])).toBe(n[2]); break;

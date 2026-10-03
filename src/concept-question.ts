@@ -12,6 +12,52 @@ export function generateConceptQuestion(template: Question, random = Math.random
   const choose = (prompt: string, answer: string, wrong: string[], explanation: string): Question => ({ ...template,
     prompt, choices: [answer,...wrong], answer: 0, explanation });
   switch(template.concept) {
+    case '일차함수의 축과 교점': {
+      const a=int(2,4), root=int(2,5);
+      return number(`y = ${a}x − ${a*root}의 그래프가 x축과 만나는 점의 x좌표는?`,root,
+        `x축 위에서는 y = 0입니다. ${a}x − ${a*root} = 0을 풀면 x = ${root}입니다.`);
+    }
+    case '닮은 삼각형의 대응변': {
+      const scale=int(2,3), a=int(2,4), b=a+int(1,3);
+      return number(`삼각형 ABC와 DEF가 이 순서로 닮았습니다. AB = ${a}, DE = ${a*scale}, BC = ${b}일 때 EF는?`,b*scale,
+        `A↔D, B↔E, C↔F가 대응합니다. AB에 대응하는 DE가 ${scale}배이므로 BC에 대응하는 EF도 ${scale}배인 ${b*scale}입니다.`);
+    }
+    case '두 자리 수의 경우의 수': {
+      const n=int(4,6);
+      return number(`1부터 ${n}까지 적힌 카드 중 2장을 뽑아 두 자리 수를 만듭니다. 십의 자리 수가 일의 자리 수보다 클 때 몇 가지인가요?`,n*(n-1)/2,
+        `서로 다른 카드 두 장을 고르면 큰 수를 십의 자리에 놓는 방법은 하나입니다. ${n} × ${n-1} ÷ 2 = ${n*(n-1)/2}가지입니다.`);
+    }
+    case '이차함수의 대칭': {
+      const h=int(2,5), d=int(1,3), k=int(1,4);
+      return number(`y = (x − ${h})² + ${k}에서 x = ${h-d}일 때와 y값이 같은 다른 x는?`,h+d,
+        `대칭축은 x = ${h}입니다. ${h-d}는 대칭축의 왼쪽으로 ${d}만큼 떨어져 있으므로 오른쪽의 x = ${h+d}에서 y값이 같습니다.`);
+    }
+    case '이차방정식의 활용': {
+      const width=int(2,5), delta=int(1,3), area=width*(width+delta);
+      return number(`직사각형의 세로는 가로보다 ${delta}cm 길고 넓이는 ${area}cm²입니다. 가로는 몇 cm인가요?`,width,
+        `가로를 x라 하면 x(x + ${delta}) = ${area}입니다. ${width} × ${width+delta} = ${area}이고 길이는 양수이므로 가로는 ${width}cm입니다.`);
+    }
+    case '원주각과 중심각': {
+      const angle=int(3,7)*10;
+      return number(`같은 호 AB를 보는 원주각은 ${angle}°입니다. 같은 호 AB에 대한 중심각은 몇 도인가요?`,angle*2,
+        `같은 호에 대한 중심각은 원주각의 2배입니다. ${angle} × 2 = ${angle*2}°입니다.`);
+    }
+    case '명제의 반례': {
+      const divisor=int(2,4), odd=2*int(1,3)+1, answer=divisor*odd;
+      const wrong=[divisor*2,divisor*4,divisor*6].map(String);
+      return choose(`“자연수 n이 ${divisor}의 배수이면 ${divisor*2}의 배수이다”의 반례는?`,String(answer),wrong,
+        `${answer}는 ${divisor}로 나누어떨어지지만 ${divisor*2}로는 나누어떨어지지 않습니다. 조건은 참이고 결론은 거짓인 ${answer}가 반례입니다.`);
+    }
+    case '다항식의 항등식': {
+      const a=int(2,4), b=int(1,4), c=int(1,4);
+      return number(`모든 실수 x에 대해 a(x + ${b}) + ${c}x = ${a+c}x + k입니다. k는?`,a*b,
+        `왼쪽을 전개하면 (a + ${c})x + ${b}a입니다. x의 계수를 비교하면 a = ${a}, 상수항을 비교하면 k = ${b} × ${a} = ${a*b}입니다.`);
+    }
+    case '순열의 조건': {
+      const n=int(4,5), factorial=(value:number):number=>value<=1?1:value*factorial(value-1), result=factorial(n-1)*2;
+      return number(`${n}명이 한 줄로 섭니다. A와 B가 반드시 이웃하도록 서는 방법은 몇 가지인가요?`,result,
+        `A와 B를 한 묶음으로 보면 ${n-1}개를 배열합니다. 묶음 안의 AB와 BA 두 순서를 곱하면 ${factorial(n-1)} × 2 = ${result}가지입니다.`);
+    }
     case '정수의 덧셈': {
       const a=int(2,12), b=int(2,12);
       return number(`x + (−${a}) = −${b}일 때 x는?`,a-b,`양변에 ${a}을 더하면 x = ${a} − ${b} = ${a-b}입니다.`);

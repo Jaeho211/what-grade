@@ -29,16 +29,25 @@ const addedConcepts: [number, string, string, number][] = [
   [5, '최대공약수', '수와 연산', 13000], [6, '비례식', '규칙과 관계', 13000],
   [7, '정수의 곱셈', '수와 연산', 10000], [7, '다각형의 내각의 합', '도형', 13000],
   [8, '일차부등식', '문자와 식', 14000], [8, '닮음비', '도형', 14000],
+  [8, '일차함수의 축과 교점', '함수', 17000],
+  [8, '닮은 삼각형의 대응변', '도형', 17000],
+  [8, '두 자리 수의 경우의 수', '자료와 가능성', 17000],
   [9, '제곱근', '수와 연산', 9000], [9, '이차방정식', '문자와 식', 12000],
   [9, '인수분해', '문자와 식', 15000], [9, '이차함수', '함수', 12000],
   [9, '삼각비', '도형', 15000], [9, '분산', '자료와 가능성', 15000],
 ];
 const challengeConcepts: [number, string, string, number][] = [
+  [9, '이차함수의 대칭', '함수', 17000],
+  [9, '이차방정식의 활용', '문자와 식', 17000],
+  [9, '원주각과 중심각', '도형', 17000],
   [9, '근호의 계산', '수와 연산', 15000], [9, '이차방정식의 두 근', '문자와 식', 17000],
   [9, '이차함수의 꼭짓점', '함수', 17000], [9, '삼각비로 길이 구하기', '도형', 17000],
   [9, '표준편차', '자료와 가능성', 17000],
 ];
 const highConcepts: [number, string, string, number][] = [
+  [10, '명제의 반례', '자료와 가능성', 17000],
+  [10, '다항식의 항등식', '문자와 식', 17000],
+  [10, '순열의 조건', '자료와 가능성', 17000],
   [10, '나머지정리', '문자와 식', 17000], [10, '판별식', '문자와 식', 17000],
   [10, '복소수의 계산', '문자와 식', 15000], [10, '조합', '자료와 가능성', 17000],
   [10, '집합의 원소 수', '자료와 가능성', 17000], [10, '합성함수', '함수', 17000],
@@ -114,9 +123,14 @@ export function nextQuestion(responses: Response[], random = Math.random): Quest
   const target = targetGrade(responses);
   const distance = Math.min(...remaining.map(q => Math.abs(q.level - target)));
   const nearby = remaining.filter(q => Math.abs(q.level - target) === distance);
-  // Prefer domains without successful evidence, then balance attempts and concepts.
-  const freshConcepts = nearby.filter(q => q.concept !== responses.at(-1)?.question.concept);
-  const eligible = freshConcepts.length ? freshConcepts : nearby;
+  // Exhaust unseen concepts at the target level before revisiting any concept,
+  // regardless of whether earlier attempts were correct, skipped, or timed out.
+  const countConcept = (q: Question) => responses.filter(r => r.question.concept === q.concept).length;
+  const fewestConceptAttempts = Math.min(...nearby.map(countConcept));
+  const leastUsedConcepts = nearby.filter(q => countConcept(q) === fewestConceptAttempts);
+  const freshConcepts = leastUsedConcepts.filter(q => q.concept !== responses.at(-1)?.question.concept);
+  const eligible = freshConcepts.length ? freshConcepts : leastUsedConcepts;
+  // Within that pool, prefer domains without successful evidence, then balance attempts.
   const confirmedDomains = levelEvidence(responses, target).domains;
   const unconfirmed = eligible.filter(q => !confirmedDomains.has(q.domain));
   const domainPool = unconfirmed.length ? unconfirmed : eligible;

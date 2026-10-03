@@ -24,6 +24,17 @@ describe('question bank', () => {
   });
 });
 describe('adaptive quiz', () => {
+  it('uses every available concept before repeating at a stable level', () => {
+    const responses: Response[] = [];
+    for (let i = 0; i < TOTAL; i++) {
+      const q = nextQuestion(responses, () => 0)!;
+      const available = questions.filter(template => template.level === q.level);
+      const counts = (concept: string) => responses.filter(r => r.question.concept === concept).length;
+      expect(counts(q.concept)).toBe(Math.min(...available.map(template => counts(template.concept))));
+      // Alternating success and skips holds the exploration level steady.
+      responses.push({ question: q, selected: i % 2 === 0 ? q.answer : null, skipped: i % 2 === 1 });
+    }
+  });
   it.each(['correct', 'wrong', 'skip', 'mixed'] as const)('completes ten distinct questions for %s responses', mode => {
     const responses = run(mode);
     expect(new Set(responses.map(r => r.question.id)).size).toBe(TOTAL);
