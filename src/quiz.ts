@@ -88,12 +88,21 @@ export function targetGrade(responses: Response[]): number {
   }
   // A strong opening earns a middle-three checkpoint before the high-school challenge.
   if (responses.length === 6 && responses.slice(-3).every(correct) && responses.at(-1)!.question.level >= 7) return Math.max(9, grade);
-  // Reserve three diverse challenges; an early recovery can still finish at middle three.
-  // Past mistakes do not lock the player out; the advanced answers still decide the result.
+  // Spend the last three questions confirming a level, lowering after two misses there.
   if (responses.length >= 7) {
     const opening = responses.slice(0, 7);
-    const last = opening.at(-1)!;
-    if (last.question.level >= 8 && correct(last) && opening.slice(-3).every(correct)) return last.question.level >= 9 ? MAX_LEVEL : 9;
+    const checkpoint = opening.at(-1)!;
+    let confirmation = checkpoint.question.level;
+    if (confirmation >= 8 && correct(checkpoint) && opening.slice(-3).every(correct)) {
+      confirmation = Math.min(MAX_LEVEL, confirmation + 1);
+    }
+    for (let i = 7; i < responses.length; i++) {
+      const lastTwo = responses.slice(i - 1, i + 1);
+      if (lastTwo.every(r => r.question.level === confirmation && !correct(r))) {
+        confirmation = Math.max(1, confirmation - 1);
+      }
+    }
+    return confirmation;
   }
   return grade;
 }
@@ -105,11 +114,16 @@ export function nextQuestion(responses: Response[], random = Math.random): Quest
   const target = targetGrade(responses);
   const distance = Math.min(...remaining.map(q => Math.abs(q.level - target)));
   const nearby = remaining.filter(q => Math.abs(q.level - target) === distance);
-  // Balance domains at this level first, then concepts; template counts do not bias selection.
+  // Prefer domains without successful evidence, then balance attempts and concepts.
+  const freshConcepts = nearby.filter(q => q.concept !== responses.at(-1)?.question.concept);
+  const eligible = freshConcepts.length ? freshConcepts : nearby;
+  const confirmedDomains = levelEvidence(responses, target).domains;
+  const unconfirmed = eligible.filter(q => !confirmedDomains.has(q.domain));
+  const domainPool = unconfirmed.length ? unconfirmed : eligible;
   const atLevel = responses.filter(r => r.question.level === target);
   const countDomain = (q: Question) => atLevel.filter(r => r.question.domain === q.domain).length;
-  const least = Math.min(...nearby.map(countDomain));
-  const balanced = nearby.filter(q => countDomain(q) === least);
+  const least = Math.min(...domainPool.map(countDomain));
+  const balanced = domainPool.filter(q => countDomain(q) === least);
   const differentConcept = balanced.filter(q => q.concept !== responses.at(-1)?.question.concept);
   const candidates = differentConcept.length ? differentConcept : balanced;
   const concepts = [...new Set(candidates.map(q => q.concept))];
@@ -142,20 +156,38 @@ export function streakStats(responses: Response[]) {
   return { current, best };
 }
 
+// Higher-level successes support prerequisites; harder failures do not refute them.
+function levelEvidence(responses: Response[], level: number) {
+  const floor = level >= 9 ? level : Math.max(1, level - 1);
+  const attempts = responses.filter(r => r.question.level >= floor
+    && (level < 9 || r.question.challenge)
+    && (r.question.level <= level || correct(r)));
+  const passed = attempts.filter(correct);
+  const domains = new Set(passed.map(r => r.question.domain).filter(Boolean));
+  const accuracy = attempts.length ? passed.length / attempts.length : 0;
+  const direct = passed.some(r => r.question.level >= level);
+  return { passed, domains, accuracy, direct };
+}
+
 export function result(responses: Response[]) {
-  const target = targetGrade(responses);
-  // A single specialty cannot establish a grade. Evidence includes its adjacent prerequisite level.
+  // Evaluate every level independently of exploration order and speed.
   const qualified = (level: number) => {
-    if (level >= 9) {
-      const advanced = responses.filter(r => correct(r) && r.question.level >= level && r.question.challenge);
-      return advanced.length >= 3 && new Set(advanced.map(r => r.question.domain)).size >= 3;
-    }
-    const evidence = responses.filter(r => correct(r) && r.question.level >= Math.max(1, level - 1));
-    return evidence.some(r => r.question.level >= level) && new Set(evidence.map(r => r.question.domain)).size >= 3;
+    const evidence = levelEvidence(responses, level);
+    return evidence.direct && evidence.passed.length >= 3
+      && evidence.domains.size >= 3 && evidence.accuracy >= 0.75;
   };
-  let grade = target;
-  while (grade > 1 && !qualified(grade)) grade--;
-  const supported = qualified(grade);
+  let grade = MAX_LEVEL;
+  while (grade >= 1 && !qualified(grade)) grade--;
+  const supported = grade >= 1;
+  if (!supported) {
+    // A tentative game label uses partial evidence, never an automatic grade-one fallback.
+    grade = Math.max(1, (responses.length ? Math.min(...responses.map(r => r.question.level)) : START_LEVEL) - 1);
+    for (let level = 1; level <= 8; level++) {
+      const evidence = levelEvidence(responses, level);
+      if (evidence.direct && evidence.passed.length >= 2
+        && evidence.domains.size >= 2 && evidence.accuracy >= 0.75) grade = level;
+    }
+  }
   const evidence = responses.filter(r => correct(r) && r.question.level >= Math.max(1, grade - 1));
   const timed = evidence.filter(r => r.elapsedMs !== undefined && r.elapsedMs! >= 1000);
   const fluent = timed.filter(r => r.elapsedMs! <= (r.question.expectedMs ?? 10000));

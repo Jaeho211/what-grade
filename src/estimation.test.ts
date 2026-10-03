@@ -10,9 +10,9 @@ describe('balanced evidence and timing', () => {
   it('does not infer middle three from Pythagoras alone or fast answers in one domain', () => {
     const only = Array.from({ length: 10 }, () => response('피타고라스 정리', 8, 2000));
     expect(result(only).supported).toBe(false);
-    expect(result(only).label).toBe('초등 1학년');
+    expect(result(only).grade).toBeLessThan(8);
   });
-  it('does not award an untested grade and uses time only for confidence', () => {
+  it('does not award an untested grade and keeps final evidence independent of speed', () => {
     const evidence = [response('약수', 5), response('직사각형의 넓이', 5), response('평균', 5)];
     const fast = result(evidence);
     const slow = result(evidence.map(r => ({ ...r, elapsedMs: 19000 })));

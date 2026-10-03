@@ -8,7 +8,7 @@ describe('middle school extension', () => {
       const responses: Response[] = [];
       for (let i = 0; i < TOTAL; i++) {
         const q = nextQuestion(responses, () => 0)!;
-        if (i % 2 === 1 && i !== 7) {
+        if (i % 2 === 1 && i < 7) {
           expect(q.level).toBe(responses[i - 1].question.level);
           expect(q.concept).not.toBe(responses[i - 1].question.concept);
         }

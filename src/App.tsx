@@ -107,7 +107,7 @@ export default function App() {
       </section>}
       {screen === 'result' && <section className="results">
         <div className="result-hero"><span className="eyebrow">YOUR MATH MOMENT</span><div className="result-icon">✦</div><h1 ref={heading} tabIndex={-1}>당신의 수학 나이는</h1><p className="grade">{summary.label}</p><p className="lead">{summary.grade === 10 ? '고1까지 도달! 수학 감각 최고예요 🏆' : summary.grade === 9 ? '중3까지 도달! 수학 감각 최고예요 🏆' : summary.grade >= 7 ? '중학교 수학까지! 멋진 도전이었어요 😎' : summary.grade >= 5 ? '수학 감각, 아직 살아있네요 😎' : summary.grade >= 3 ? '오랜만인데 꽤 잘 풀었는데요! ✨' : '한 번 더! 이번엔 올라갈 수 있어요 🚀'}</p><span className="score">10문제 중 {summary.score}개 정답 · {formatTime(summary.elapsedMs)}</span><p className="fine">재미로 보는 수학 나이예요. 실제 학년이나 수학 능력을 의미하지 않아요.</p></div>
-        <p className="fine center">{summary.supported ? summary.speed : '다음 도전에서는 더 많은 유형을 맞혀보세요!'}</p>
+        <p className="fine center">{summary.supported ? summary.speed : '확인한 문제로 추정한 결과예요. 다음 도전에서 더 많은 유형을 확인해보세요!'}</p>
         <p className="best-streak">✨ 최고 연속 정답 <strong>{summary.bestStreak}회</strong></p>
         {summary.skips > 0 && <p className="fine center">건너뛴 문제 {summary.skips}개 · 정답과 해설을 확인해보세요.</p>}
         {summary.timeouts > 0 && <p className="fine center">시간 초과 {summary.timeouts}문제 · 이번엔 조금 더 빠르게!</p>}
