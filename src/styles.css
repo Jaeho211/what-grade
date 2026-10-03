@@ -148,3 +148,8 @@ summary { min-height: 56px; font-size: 15px; }
 .shared-record span { display: block; font-size: 12px; color: #657062; }
 .shared-record strong { display: block; margin-top: 8px; font-size: 28px; color: #285943; }
 .shared-record p { margin: 8px 0 0; font-size: 14px; line-height: 1.7; }
+
+/* Explicit radicals do not depend on the browser's MathML radical font. */
+.math-radical { display: inline-flex; align-items: flex-start; vertical-align: middle; white-space: nowrap; font-family: 'Noto Sans KR', sans-serif; font-size: 1em; font-weight: 400; }
+.math-radical-sign { display: block; width: .625em; height: 1.25em; flex: 0 0 .625em; overflow: visible; }
+.math-radicand { display: block; border-top: .0625em solid currentColor; margin-top: .03125em; padding: .05em .08em 0 .02em; line-height: 1.15; }

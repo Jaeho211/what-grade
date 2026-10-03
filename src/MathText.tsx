@@ -17,7 +17,15 @@ function expression(text: string): ReactNode[] {
       const [numerator, denominator] = token.split('/');
       node = denominator === '1' ? atom(numerator) : createElement('mfrac', null, atom(numerator), atom(denominator));
     } else if (token === '√' && /^\d/.test(tokens[i + 1] ?? '')) {
-      node = createElement('msqrt', null, atom(tokens[++i]));
+      // Some mobile math fonts omit native msqrt's radical glyph entirely.
+      // Draw the sign and overbar explicitly, while retaining the MathML equation.
+      const radicand = tokens[++i];
+      node = createElement('mtext', null,
+        createElement('span', { className: 'math-radical', 'aria-hidden': 'true' },
+          createElement('svg', { className: 'math-radical-sign', viewBox: '0 0 20 40', xmlns: 'http://www.w3.org/2000/svg', focusable: 'false' },
+            createElement('path', { d: 'M1 24 L6 21 L10 36 L18 2 L20 2', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinejoin: 'round' })),
+          createElement('span', { className: 'math-radicand' }, radicand)));
+
     } else if (/^(?:\d|[xynA-Zθ])/.test(token)) {
       node = atom(token);
     } else {

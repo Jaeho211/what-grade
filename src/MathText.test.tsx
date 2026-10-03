@@ -5,7 +5,9 @@ import { MathText } from './MathText';
 describe('textbook math notation', () => {
   it('draws the square-root bar over the full multi-digit number', () => {
     const html = renderToStaticMarkup(<MathText text="√144 = ?" />);
-    expect(html).toContain('<msqrt><mn>144</mn></msqrt>');
+    expect(html).toContain('class="math-radical-sign"');
+    expect(html).toContain('<span class="math-radicand">144</span>');
+    expect(html).not.toContain('<msqrt>');
     expect(html).toContain('aria-label="루트 144 = ?"');
     expect(html).toContain('<mo>=</mo><mo>?</mo>');
   });
@@ -19,7 +21,7 @@ describe('textbook math notation', () => {
     expect(renderToStaticMarkup(<MathText text="12 + 3 = ?" />)).toBe('12 + 3 = ?');
     const html = renderToStaticMarkup(<MathText text="√는 음이 아닌 제곱근입니다. √49 = 7입니다." />);
     expect(html).toContain('√는 음이 아닌 제곱근입니다. ');
-    expect(html).toContain('<msqrt><mn>49</mn></msqrt>');
+    expect(html).toContain('<span class="math-radicand">49</span>');
   });
   it('renders complete equations with italic variables and upright numbers', () => {
     const html = renderToStaticMarkup(<MathText text="3x + 2 = 17에서 x는?" />);
@@ -79,4 +81,13 @@ describe('trigonometric notation', () => {
     expect(html).toContain('<mo>=</mo><mfrac><mn>3</mn><mn>5</mn></mfrac>');
     expect(html.match(/mathvariant="normal">sin/g)).toHaveLength(2);
   });
+});
+
+
+it('draws all three radicals in the reported mobile problem, including after the coefficient', () => {
+  const html = renderToStaticMarkup(<MathText text="√27 + √147 = n√3일 때 n은?" />);
+  expect(html.match(/class="math-radical-sign"/g)).toHaveLength(3);
+  for (const n of [27,147,3]) expect(html).toContain(`<span class="math-radicand">${n}</span>`);
+  expect(html).toContain('<mi>n</mi><mtext><span class="math-radical"');
+  expect(html).toContain('aria-label="루트 27 + 루트 147 = n루트 3"');
 });
