@@ -5,7 +5,7 @@ export default defineConfig({ plugins: [react(), VitePWA({
   registerType: 'prompt',
   includeAssets: ['apple-touch-icon.png', 'icon.svg'],
   manifest: {
-    id: '/', name: '몇 학년? · 수학', short_name: '몇 학년?', description: '10문제로 알아보는 나의 수학 나이',
+    id: '/', name: '몇 학년? 수학', short_name: '몇 학년? 수학', description: '10문제로 알아보는 나의 수학 나이',
     lang: 'ko', start_url: '/', scope: '/', display: 'standalone',
     theme_color: '#faf8f4', background_color: '#faf8f4',
     icons: [
