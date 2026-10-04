@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig({ plugins: [react(), VitePWA({
   registerType: 'prompt',
-  includeAssets: ['apple-touch-icon.png'],
+  includeAssets: ['apple-touch-icon.png', 'icon.svg'],
   manifest: {
     id: '/', name: '몇 학년? · 수학', short_name: '몇 학년?', description: '10문제로 알아보는 나의 수학 나이',
     lang: 'ko', start_url: '/', scope: '/', display: 'standalone',
@@ -15,7 +15,7 @@ export default defineConfig({ plugins: [react(), VitePWA({
     ],
   },
   workbox: {
-    globPatterns: ['**/*.{js,css,html,png}'],
+    globPatterns: ['**/*.{js,css,html,png,svg}'],
     navigateFallbackDenylist: [/^\/share\//, /^\/share-card\//],
     cleanupOutdatedCaches: true,
   },
